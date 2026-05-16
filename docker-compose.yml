@@ -1,0 +1,23 @@
+services:
+  db:
+    container_name: postgress-spring-boot-student
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: lazar
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: lazardb
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+networks:
+  db:
+    driver: bridge
+volumes:
+  db:
+
+

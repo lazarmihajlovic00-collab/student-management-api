@@ -1,5 +1,31 @@
 ### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=IntelliJ IDEA
+GET http://localhost:8080/v1
 
 ###
+GET http://localhost:8080/api/students
+
+###
+GET http://localhost:8080/api/students/1
+
+###
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{
+    "name": "Harry",
+    "email": "yo@yahoo.com",
+    "age": 22
+}
+
+###
+DELETE http://localhost:8080/api/students/1
+
+###
+PUT http://localhost:8080/api/students/1
+Content-Type: application/json
+
+{
+    "name": "Michael",
+    "email": "mail@gmail.com",
+    "age": 21
+}
