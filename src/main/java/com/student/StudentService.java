@@ -54,4 +54,12 @@ public class StudentService {
         student.setEmail(request.getEmail());
         student.setAge(request.getAge());
     }
+
+    public List<Student> searchStudentsByName(String name){
+        return studentRepository.findByNameContainingIgnoreCase(name);
+    }
+    public List<Student> searchStudentsByEmail(String email){
+        return studentRepository.findByEmailContainingIgnoreCase(email);
+    }
+
 }

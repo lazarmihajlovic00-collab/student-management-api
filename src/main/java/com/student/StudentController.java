@@ -53,4 +53,15 @@ public class StudentController {
         return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
+    @GetMapping("/search/name")
+    public ResponseEntity<ApiResponse<List<Student>>> searchStudentsByName(@RequestParam String name){
+         return ResponseEntity.ok(ApiResponse.ok(studentService.searchStudentsByName(name)));
+    }
+
+    @GetMapping("/search/email")
+    public  ResponseEntity<ApiResponse<List<Student>>> searchStudentsByEmail(@RequestParam String email){
+        return ResponseEntity.ok(ApiResponse.ok(studentService.searchStudentsByEmail(email)));
+    }
+
+
 }
