@@ -12,6 +12,10 @@ The project demonstrates clean layered architecture and standard backend develop
 - Input validation and centralized error handling
 - Pagination and sorting support
 - Layered architecture (Controller / Service / Repository)
+- Search endpoints
+- Swagger / OpenAPI documentation
+- Dockerized PostgreSQL database
+- JWT Authentication (in progress)
 
 ---
 
@@ -23,6 +27,9 @@ The project demonstrates clean layered architecture and standard backend develop
 - Hibernate
 - MySQL / PostgreSQL
 - Maven
+- Spring Security
+- Docker
+- Swagger / OpenAPI
 
 ---
 
