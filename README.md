@@ -15,7 +15,7 @@ The project demonstrates clean layered architecture and standard backend develop
 - Search endpoints
 - Swagger / OpenAPI documentation
 - Dockerized PostgreSQL database
-- JWT Authentication (in progress)
+- JWT Authentication & endpoint protection
 
 ---
 
@@ -25,7 +25,7 @@ The project demonstrates clean layered architecture and standard backend develop
 - Spring Boot
 - Spring Data JPA
 - Hibernate
-- MySQL / PostgreSQL
+- PostgreSQL
 - Maven
 - Spring Security
 - Docker
@@ -45,6 +45,27 @@ src/main/java/com/student
 - dto → Data Transfer Objects (if used)
 - exception → Custom exceptions and handlers
 - config → Configuration classes
+```
+
+---
+
+## Authentication
+
+The API uses JWT-based authentication with Spring Security.
+
+### Public Endpoints
+
+- POST `/auth/register`
+- POST `/auth/login`
+
+### Protected Endpoints
+
+All `/api/students/**` endpoints require a valid JWT token.
+
+Example header:
+
+```http
+Authorization: Bearer your_jwt_token
 ```
 
 ---
@@ -79,7 +100,6 @@ src/main/java/com/student
 
 ## Features in Progress
 
-- JWT Authentication & Authorization  
 - Role-based access control (Admin/User)  
 - Advanced filtering and search  
 - Unit and integration testing improvements  
@@ -91,7 +111,13 @@ src/main/java/com/student
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/student-management-api.git
+git clone https://github.com/lazarmihajlovic00-collab/student-management-api.git
+```
+
+Install dependencies:
+
+```bash
+mvn clean install
 ```
 
 Configure database in `application.properties`
@@ -100,6 +126,12 @@ Run the application:
 
 ```bash
 mvn spring-boot:run
+```
+
+Access Swagger UI:
+
+```text
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
