@@ -1,5 +1,6 @@
 package com.student.auth;
 
+import com.student.user.Role;
 import com.student.user.User;
 import com.student.user.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,12 +25,13 @@ public class AuthenticationService {
         }
 
         User user = new User();
+        user.setRole(Role.USER);
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user);
         return new AuthenticationResponse(token);
     }
 
@@ -42,7 +44,7 @@ public class AuthenticationService {
             throw new IllegalStateException("Invalid credentials");
         }
 
-        String token =  jwtService.generateToken(user.getEmail());
+        String token =  jwtService.generateToken(user);
 
         return new AuthenticationResponse(token);
     }

@@ -14,8 +14,10 @@ The project demonstrates clean layered architecture and standard backend develop
 - Layered architecture (Controller / Service / Repository)
 - Search endpoints
 - Swagger / OpenAPI documentation
+- Swagger/OpenAPI integration with JWT authorization support
 - Dockerized PostgreSQL database
-- JWT Authentication & endpoint protection
+- JWT-based authentication and endpoint protection
+- Role-based authorization (USER / ADMIN)
 
 ---
 
@@ -52,6 +54,7 @@ src/main/java/com/student
 ## Authentication
 
 The API uses JWT-based authentication with Spring Security.
+JWT tokens can be tested directly through Swagger UI using the Authorize button.
 
 ### Public Endpoints
 
@@ -67,6 +70,13 @@ Example header:
 ```http
 Authorization: Bearer your_jwt_token
 ```
+### Access Rules
+
+- USER role:
+    - Can read student data (GET requests)
+
+- ADMIN role:
+    - Can read, create, update, and delete students
 
 ---
 
@@ -100,9 +110,9 @@ Authorization: Bearer your_jwt_token
 
 ## Features in Progress
 
-- Role-based access control (Admin/User)  
-- Advanced filtering and search  
-- Unit and integration testing improvements  
+- Advanced filtering and search
+- Unit and integration testing improvements
+- Refresh token support  
 
 ---
 
@@ -133,9 +143,9 @@ Access Swagger UI:
 ```text
 http://localhost:8080/swagger-ui/index.html
 ```
-
+Use the Swagger "Authorize" button to test protected endpoints with JWT tokens.
 ---
 
 ## Purpose
 
-This project was built as a learning and portfolio project to demonstrate backend development skills using Spring Boot and RESTful architecture principles.
+This project was built as a backend learning and portfolio project to demonstrate practical Spring Boot development skills, REST API design, authentication and authorization, and modern backend architecture principles.
