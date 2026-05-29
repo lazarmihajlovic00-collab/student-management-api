@@ -29,4 +29,19 @@ public class AuthenticationController {
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<AuthenticationResponse>> refreshToken(
+            @RequestBody RefreshTokenRequest request){
+        AuthenticationResponse response = authenticationService.refreshToken(request);
+
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<String>> logout(@RequestBody RefreshTokenRequest request){
+        authenticationService.logout(request);
+        return ResponseEntity.ok(ApiResponse.ok("Successfully logged out"));
+    }
+
+
 }

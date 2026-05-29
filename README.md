@@ -1,7 +1,8 @@
+````md
 # Student Management API
 
 A RESTful backend application built with **Spring Boot** for managing student data.  
-The project demonstrates clean layered architecture and standard backend development practices.
+The project demonstrates clean layered architecture, secure API development, and modern backend engineering practices.
 
 ---
 
@@ -9,15 +10,19 @@ The project demonstrates clean layered architecture and standard backend develop
 
 - Create, read, update, and delete students (CRUD operations)
 - RESTful API design with proper HTTP status handling
-- Input validation and centralized error handling
-- Pagination and sorting support
+- DTO-based request handling and input validation
+- Centralized exception handling
+- Pagination, sorting, and search functionality
 - Layered architecture (Controller / Service / Repository)
-- Search endpoints
-- Swagger / OpenAPI documentation
-- Swagger/OpenAPI integration with JWT authorization support
-- Dockerized PostgreSQL database
-- JWT-based authentication and endpoint protection
+- JWT-based authentication with Spring Security
+- Password encryption using BCrypt
 - Role-based authorization (USER / ADMIN)
+- Protected endpoints with access control
+- Refresh token implementation
+- Token revocation/logout functionality
+- Swagger / OpenAPI documentation
+- Swagger JWT authorization support
+- Dockerized PostgreSQL database
 
 ---
 
@@ -25,11 +30,11 @@ The project demonstrates clean layered architecture and standard backend develop
 
 - Java
 - Spring Boot
+- Spring Security
 - Spring Data JPA
 - Hibernate
 - PostgreSQL
 - Maven
-- Spring Security
 - Docker
 - Swagger / OpenAPI
 
@@ -40,43 +45,72 @@ The project demonstrates clean layered architecture and standard backend develop
 ```text
 src/main/java/com/student
 
-- controller → REST controllers (API endpoints)
+- controller → REST API endpoints
 - service → Business logic layer
-- repository → Data access layer
+- repository → Database access layer
 - entity → JPA entities
-- dto → Data Transfer Objects (if used)
-- exception → Custom exceptions and handlers
-- config → Configuration classes
+- dto → Request / response DTOs
+- exception → Custom exceptions and global handlers
+- auth → Authentication and JWT logic
+- token → Refresh token management
+- config → Security and application configuration
 ```
 
 ---
 
-## Authentication
+## Authentication & Authorization
 
-The API uses JWT-based authentication with Spring Security.
-JWT tokens can be tested directly through Swagger UI using the Authorize button.
+The application uses JWT-based authentication with Spring Security.
 
-### Public Endpoints
+Spring Security is used to enforce role-based access rules for protected endpoints.
 
-- POST `/auth/register`
-- POST `/auth/login`
+### Authentication Flow
 
-### Protected Endpoints
+1. User registers or logs in
+2. Server validates credentials
+3. Access token (JWT) is generated
+4. Refresh token is generated and stored in the database
+5. JWT token is used to access protected endpoints
+6. Refresh token can generate a new access token when the old one expires
 
-All `/api/students/**` endpoints require a valid JWT token.
+JWT tokens can be tested directly in Swagger UI using the **Authorize** button.
+
+---
+
+## Public Endpoints
+
+```http
+POST /auth/register
+POST /auth/login
+POST /auth/refresh
+POST /auth/logout
+```
+
+---
+
+## Protected Endpoints
+
+All `/api/students/**` endpoints require a valid JWT access token.
 
 Example header:
 
 ```http
 Authorization: Bearer your_jwt_token
 ```
-### Access Rules
 
-- USER role:
-    - Can read student data (GET requests)
+---
 
-- ADMIN role:
-    - Can read, create, update, and delete students
+## Access Rules
+
+### USER Role
+
+- Can read student data (GET requests)
+
+### ADMIN Role
+
+- Can create students
+- Can update students
+- Can delete students
 
 ---
 
@@ -84,13 +118,13 @@ Authorization: Bearer your_jwt_token
 
 ### Students
 
-| Method | Endpoint           | Description         |
-|--------|--------------------|---------------------|
-| GET    | /api/students      | Get all students    |
-| GET    | /api/students/{id} | Get student by ID   |
-| POST   | /api/students      | Create new student  |
-| PUT    | /api/students/{id} | Update student      |
-| DELETE | /api/students/{id} | Delete student      |
+| Method | Endpoint           | Description        |
+|--------|--------------------|--------------------|
+| GET    | /api/students      | Get all students   |
+| GET    | /api/students/{id} | Get student by ID  |
+| POST   | /api/students      | Create new student |
+| PUT    | /api/students/{id} | Update student     |
+| DELETE | /api/students/{id} | Delete student     |
 
 ---
 
@@ -108,11 +142,38 @@ Authorization: Bearer your_jwt_token
 
 ---
 
+## Example Authentication Response
+
+```json
+{
+  "accessToken": "jwt_access_token",
+  "refreshToken": "refresh_token"
+}
+```
+
+---
+
+## Refresh Token System
+
+The project includes refresh token support for improved authentication security.
+
+### Refresh Token Features
+
+- Refresh tokens stored in PostgreSQL
+- Token expiration handling
+- Token revocation support
+- Secure logout flow
+- New JWT generation without re-login
+
+---
+
 ## Features in Progress
 
-- Advanced filtering and search
-- Unit and integration testing improvements
-- Refresh token support  
+- Advanced filtering and dynamic search
+- Unit and integration testing
+- API security hardening
+- Clean Architecture refactor
+- CI/CD pipeline integration
 
 ---
 
@@ -124,13 +185,23 @@ Clone the repository:
 git clone https://github.com/lazarmihajlovic00-collab/student-management-api.git
 ```
 
+Move into the project directory:
+
+```bash
+cd student-management-api
+```
+
 Install dependencies:
 
 ```bash
 mvn clean install
 ```
 
-Configure database in `application.properties`
+Configure the database inside:
+
+```text
+src/main/resources/application.properties
+```
 
 Run the application:
 
@@ -138,14 +209,28 @@ Run the application:
 mvn spring-boot:run
 ```
 
-Access Swagger UI:
+---
+
+## Swagger UI
+
+Swagger UI is available at:
 
 ```text
 http://localhost:8080/swagger-ui/index.html
 ```
-Use the Swagger "Authorize" button to test protected endpoints with JWT tokens.
+
+Use the **Authorize** button to test protected endpoints with JWT tokens.
+
 ---
 
 ## Purpose
 
-This project was built as a backend learning and portfolio project to demonstrate practical Spring Boot development skills, REST API design, authentication and authorization, and modern backend architecture principles.
+This project was built as a backend engineering and portfolio project to demonstrate:
+
+- REST API development
+- Spring Boot backend engineering
+- Authentication and authorization
+- Secure API design
+- Database integration with JPA/Hibernate
+- Production-style backend architecture principles
+````

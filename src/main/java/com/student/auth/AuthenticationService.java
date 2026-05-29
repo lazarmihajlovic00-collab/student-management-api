@@ -1,5 +1,7 @@
 package com.student.auth;
 
+import com.student.token.RefreshToken;
+import com.student.token.RefreshTokenService;
 import com.student.user.Role;
 import com.student.user.User;
 import com.student.user.UserRepository;
@@ -12,13 +14,16 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder) {
+    public AuthenticationService(UserRepository userRepository, JwtService jwtService,
+                                 PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -33,8 +38,9 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user);
-        return new AuthenticationResponse(token);
+        String accessToken = jwtService.generateToken(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+        return new AuthenticationResponse(accessToken, refreshToken.getToken());
     }
 
     public AuthenticationResponse login(LoginRequest request) {
@@ -47,8 +53,24 @@ public class AuthenticationService {
         }
 
         String token =  jwtService.generateToken(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+        return new AuthenticationResponse(token,  refreshToken.getToken());
+    }
 
-        return new AuthenticationResponse(token);
+    public AuthenticationResponse refreshToken(RefreshTokenRequest request) {
+        RefreshToken refreshToken = refreshTokenService.findByToken(request.getRefreshToken());
+
+        if(!refreshTokenService.isValid(refreshToken)){
+            throw new IllegalStateException("Invalid refresh token");
+        }
+
+        User user = refreshToken.getUser();
+        String accessToken = jwtService.generateToken(user);
+        return new AuthenticationResponse(accessToken, refreshToken.getToken());
+    }
+
+    public void logout(RefreshTokenRequest request) {
+        refreshTokenService.revokeRefreshToken(request.getRefreshToken());
     }
 
 }
