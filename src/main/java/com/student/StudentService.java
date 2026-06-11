@@ -53,10 +53,19 @@ public class StudentService {
 
     @Transactional
     public void updateStudentRequest(Integer id, StudentRequest request){
+
         Student student = studentRepository.findById(id).orElseThrow(
                 () -> new StudentNotFoundException(
                         "Student with id " + id + " not found"
                 ));
+
+        if (!student.getEmail().equals(request.getEmail())
+                && studentRepository.existsByEmail(request.getEmail())) {
+
+            throw new EmailAlreadyExistsException(
+                    "Email already taken"
+            );
+        }
 
         student.setName(request.getName());
         student.setEmail(request.getEmail());
