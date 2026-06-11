@@ -1,8 +1,8 @@
 package com.student;
 
+import com.student.exception.EmailAlreadyExistsException;
+import com.student.exception.StudentNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +24,22 @@ public class StudentService {
     }
 
     public Student getStudentById(Integer id){
-        return studentRepository.findById(id).orElseThrow(() -> new IllegalStateException(id + " not found"));
+        return studentRepository.findById(id).orElseThrow(() ->
+                new StudentNotFoundException("Student with id " + id + " not found"));
     }
 
     public void deleteStudent(Integer id){
+        if(!studentRepository.existsById(id)){
+            throw new StudentNotFoundException(
+                    "Student with id " + id + " not found"
+            );
+        }
         studentRepository.deleteById(id);
     }
 
     public void addStudentRequest(StudentRequest request){
         if(studentRepository.existsByEmail(request.getEmail())){
-            throw new IllegalStateException("Email already taken");
+            throw new EmailAlreadyExistsException("Email already taken");
         }
 
         Student student = new Student();
@@ -48,7 +54,9 @@ public class StudentService {
     @Transactional
     public void updateStudentRequest(Integer id, StudentRequest request){
         Student student = studentRepository.findById(id).orElseThrow(
-                () -> new IllegalStateException("Student not found"));
+                () -> new StudentNotFoundException(
+                        "Student with id " + id + " not found"
+                ));
 
         student.setName(request.getName());
         student.setEmail(request.getEmail());

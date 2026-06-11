@@ -1,5 +1,6 @@
 package com.student.token;
 
+import com.student.exception.RefreshTokenNotFoundException;
 import com.student.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class RefreshTokenService {
 
     public RefreshToken findByToken(String token) {
         return refreshTokenRepository.findByToken(token)
-                .orElseThrow(()->new RuntimeException("RefreshToken not found"));
+                .orElseThrow(()->new RefreshTokenNotFoundException("RefreshToken not found"));
     }
 
     public boolean isValid(RefreshToken refreshToken) {

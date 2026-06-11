@@ -1,5 +1,8 @@
 package com.student.auth;
 
+import com.student.exception.EmailAlreadyExistsException;
+import com.student.exception.InvalidCredentialsException;
+import com.student.exception.InvalidRefreshTokenException;
 import com.student.token.RefreshToken;
 import com.student.token.RefreshTokenService;
 import com.student.user.Role;
@@ -28,7 +31,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         if(userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalStateException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         User user = new User();
@@ -45,11 +48,11 @@ public class AuthenticationService {
 
     public AuthenticationResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new IllegalStateException("Invalid credentials"));
+                () -> new InvalidCredentialsException("Invalid credentials"));
         boolean passwordMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if(!passwordMatches){
-            throw new IllegalStateException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
 
         String token =  jwtService.generateToken(user);
@@ -61,7 +64,7 @@ public class AuthenticationService {
         RefreshToken refreshToken = refreshTokenService.findByToken(request.getRefreshToken());
 
         if(!refreshTokenService.isValid(refreshToken)){
-            throw new IllegalStateException("Invalid refresh token");
+            throw new InvalidRefreshTokenException("Invalid refresh token");
         }
 
         User user = refreshToken.getUser();
