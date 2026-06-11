@@ -2,6 +2,7 @@ package com.student;
 
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ public class StudentRequest {
     String email;
 
     @NotNull
+    @Min(value = 1, message = "age must be greater than 1")
     Integer age;
 
     public String getName() {
