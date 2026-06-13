@@ -23,6 +23,9 @@ The project demonstrates clean layered architecture, secure API development, and
 - Swagger / OpenAPI documentation
 - Swagger JWT authorization support
 - Dockerized PostgreSQL database
+- Unit testing with JUnit 5 and Mockito
+- H2 in-memory database for testing
+- GitHub Actions CI pipeline
 
 ---
 
@@ -37,6 +40,10 @@ The project demonstrates clean layered architecture, secure API development, and
 - Maven
 - Docker
 - Swagger / OpenAPI
+- JUnit 5
+- Mockito
+- H2 Database
+- GitHub Actions
 
 ---
 
@@ -167,13 +174,35 @@ The project includes refresh token support for improved authentication security.
 
 ---
 
+## Testing
+
+The project includes automated unit testing focused on the service layer.
+
+### Testing Stack
+
+- JUnit 5
+- Mockito
+- H2 Database
+
+### Covered Scenarios
+
+- Student creation
+- Student retrieval
+- Student update
+- Student deletion
+- Validation of duplicate emails
+- Student not found scenarios
+- Exception handling paths
+
+Tests are automatically executed through the GitHub Actions CI pipeline on every push and pull request.
+
 ## Features in Progress
 
 - Advanced filtering and dynamic search
-- Unit and integration testing
+- Integration testing
 - API security hardening
 - Clean Architecture refactor
-- CI/CD pipeline integration
+- Continuous Deployment (CD)
 
 ---
 
