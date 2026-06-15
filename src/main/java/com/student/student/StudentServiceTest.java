@@ -1,9 +1,5 @@
-package com.student.service;
+package com.student.student;
 
-import com.student.Student;
-import com.student.StudentRepository;
-import com.student.StudentRequest;
-import com.student.StudentService;
 import com.student.exception.EmailAlreadyExistsException;
 import com.student.exception.StudentNotFoundException;
 import org.junit.jupiter.api.Test;

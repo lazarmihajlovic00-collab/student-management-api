@@ -1,4 +1,4 @@
-package com.student;
+package com.student.student;
 
 import jakarta.persistence.*;
 

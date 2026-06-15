@@ -1,4 +1,4 @@
-package com.student;
+package com.student.student;
 
 import com.student.exception.EmailAlreadyExistsException;
 import com.student.exception.StudentNotFoundException;

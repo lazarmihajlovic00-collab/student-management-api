@@ -1,4 +1,4 @@
-package com.student.token;
+package com.student.refreshtoken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

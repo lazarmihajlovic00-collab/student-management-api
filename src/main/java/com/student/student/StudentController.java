@@ -1,4 +1,4 @@
-package com.student;
+package com.student.student;
 
 import com.student.api.ApiResponse;
 import jakarta.validation.Valid;

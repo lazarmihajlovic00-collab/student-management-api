@@ -1,4 +1,4 @@
-package com.student.auth;
+package com.student.refreshtoken;
 
 public class RefreshTokenRequest {
 

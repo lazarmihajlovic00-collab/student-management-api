@@ -3,12 +3,12 @@ package com.student.auth;
 import com.student.exception.EmailAlreadyExistsException;
 import com.student.exception.InvalidCredentialsException;
 import com.student.exception.InvalidRefreshTokenException;
-import com.student.token.RefreshToken;
-import com.student.token.RefreshTokenService;
+import com.student.refreshtoken.RefreshToken;
+import com.student.refreshtoken.RefreshTokenRequest;
+import com.student.refreshtoken.RefreshTokenService;
 import com.student.user.Role;
 import com.student.user.User;
 import com.student.user.UserRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

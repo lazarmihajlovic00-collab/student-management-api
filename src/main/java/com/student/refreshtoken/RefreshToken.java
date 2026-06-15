@@ -1,4 +1,4 @@
-package com.student.token;
+package com.student.refreshtoken;
 
 import jakarta.persistence.*;
 import com.student.user.*;

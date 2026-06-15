@@ -1,4 +1,4 @@
-package com.student.token;
+package com.student.refreshtoken;
 
 import com.student.exception.RefreshTokenNotFoundException;
 import com.student.user.User;

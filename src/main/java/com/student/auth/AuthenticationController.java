@@ -1,6 +1,7 @@
 package com.student.auth;
 
 import com.student.api.ApiResponse;
+import com.student.refreshtoken.RefreshTokenRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
