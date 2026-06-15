@@ -2,6 +2,7 @@ package com.student.student;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +16,13 @@ public class Student {
     String email;
 
     Integer age;
+
+    @Enumerated(EnumType.STRING)
+    private StudentStatus status;
+
+    private LocalDate enrollmentDate;
+
+    private LocalDate graduationDate;
 
     public Student(Integer id, String name, String email, Integer age) {
         this.id = id;
@@ -56,6 +64,30 @@ public class Student {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public StudentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(StudentStatus status) {
+        this.status = status;
+    }
+
+    public LocalDate getEnrollmentDate() {
+        return enrollmentDate;
+    }
+
+    public void setEnrollmentDate(LocalDate enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
+    }
+
+    public LocalDate getGraduationDate() {
+        return graduationDate;
+    }
+
+    public void setGraduationDate(LocalDate graduationDate) {
+        this.graduationDate = graduationDate;
     }
 
     @Override

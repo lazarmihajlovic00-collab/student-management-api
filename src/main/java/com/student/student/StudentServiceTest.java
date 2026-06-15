@@ -191,4 +191,51 @@ class StudentServiceTest {
                 () -> studentService.updateStudentRequest(studentId, request)
         );
     }
+
+    @Test
+    void shouldUpdateStudentWhenEmailRemainsUnchanged() {
+
+        Integer studentId = 1;
+
+        Student existingStudent =
+                new Student(
+                        studentId,
+                        "Lazar",
+                        "lazar@mail.com",
+                        20
+                );
+
+        StudentRequest request =
+                new StudentRequest();
+
+        request.setName("Lazar Updated");
+        request.setEmail("lazar@mail.com");
+        request.setAge(25);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(existingStudent));
+
+        studentService.updateStudentRequest(
+                studentId,
+                request
+        );
+
+        assertEquals(
+                "Lazar Updated",
+                existingStudent.getName()
+        );
+
+        assertEquals(
+                "lazar@mail.com",
+                existingStudent.getEmail()
+        );
+
+        assertEquals(
+                25,
+                existingStudent.getAge()
+        );
+
+        verify(studentRepository, never())
+                .existsByEmail(any());
+    }
 }
