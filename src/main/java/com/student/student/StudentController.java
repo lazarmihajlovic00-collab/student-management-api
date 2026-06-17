@@ -63,5 +63,16 @@ public class StudentController {
         return ResponseEntity.ok(ApiResponse.ok(studentService.searchStudentsByEmail(email)));
     }
 
+    @PatchMapping("{id}/graduate")
+    public ResponseEntity<ApiResponse<Void>> graduateStudent(
+            @PathVariable Integer id
+    ) {
+
+        studentService.graduateStudent(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok(null)
+        );
+    }
 
 }

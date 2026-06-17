@@ -109,4 +109,16 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(response);
     }
+
+    @ExceptionHandler(StudentAlreadyGraduatedException.class)
+    public ResponseEntity<ErrorResponse> handleStudentAlreadyGraduated(
+            StudentAlreadyGraduatedException ex) {
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+    }
+
+
 }

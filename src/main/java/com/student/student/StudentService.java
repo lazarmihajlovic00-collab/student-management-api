@@ -1,6 +1,7 @@
 package com.student.student;
 
 import com.student.exception.EmailAlreadyExistsException;
+import com.student.exception.StudentAlreadyGraduatedException;
 import com.student.exception.StudentNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -47,6 +49,10 @@ public class StudentService {
         student.setEmail(request.getEmail());
         student.setAge(request.getAge());
 
+        student.setStatus(StudentStatus.ACTIVE);
+        student.setEnrollmentDate(java.time.LocalDate.now());
+        student.setGraduationDate(null);
+
         studentRepository.save(student);
 
     }
@@ -77,6 +83,27 @@ public class StudentService {
     }
     public List<Student> searchStudentsByEmail(String email){
         return studentRepository.findByEmailContainingIgnoreCase(email);
+    }
+
+    @Transactional
+    public void graduateStudent(Integer id) {
+
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with id " + id + " not found"
+                        )
+                );
+
+        if (student.getStatus() == StudentStatus.GRADUATED) {
+
+            throw new StudentAlreadyGraduatedException(
+                    "Student has already graduated"
+            );
+        }
+
+        student.setStatus(StudentStatus.GRADUATED);
+        student.setGraduationDate(LocalDate.now());
     }
 
 }

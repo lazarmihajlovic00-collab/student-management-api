@@ -1,6 +1,7 @@
 package com.student.student;
 
 import com.student.exception.EmailAlreadyExistsException;
+import com.student.exception.StudentAlreadyGraduatedException;
 import com.student.exception.StudentNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -237,5 +238,72 @@ class StudentServiceTest {
 
         verify(studentRepository, never())
                 .existsByEmail(any());
+    }
+
+    @Test
+    void shouldGraduateStudent() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.ACTIVE);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        studentService.graduateStudent(studentId);
+
+        assertEquals(
+                StudentStatus.GRADUATED,
+                student.getStatus()
+        );
+
+        assertEquals(
+                java.time.LocalDate.now(),
+                student.getGraduationDate()
+        );
+    }
+
+    @Test
+    void shouldThrowWhenGraduatingNonExistingStudent() {
+
+        Integer studentId = 1;
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                StudentNotFoundException.class,
+                () -> studentService.graduateStudent(studentId)
+        );
+    }
+
+    @Test
+    void shouldThrowWhenStudentAlreadyGraduated() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.GRADUATED);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        assertThrows(
+                StudentAlreadyGraduatedException.class,
+                () -> studentService.graduateStudent(studentId)
+        );
     }
 }
