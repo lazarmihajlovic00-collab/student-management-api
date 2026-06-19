@@ -3,6 +3,7 @@ package com.student.student;
 import com.student.exception.EmailAlreadyExistsException;
 import com.student.exception.StudentAlreadyGraduatedException;
 import com.student.exception.StudentNotFoundException;
+import com.student.exception.StudentStatusChangeNotAllowedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -154,7 +155,7 @@ class StudentServiceTest {
         Integer studentId = 1;
 
         Student existingStudent = new Student(studentId, "Lazar",
-                        "old@mail.com", 20);
+                "old@mail.com", 20);
 
         StudentRequest request = new StudentRequest();
         request.setName("Marko");
@@ -306,4 +307,147 @@ class StudentServiceTest {
                 () -> studentService.graduateStudent(studentId)
         );
     }
+
+    @Test
+    void shouldSuspendStudent() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.ACTIVE);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        studentService.suspendStudent(studentId);
+
+        assertEquals(
+                StudentStatus.SUSPENDED,
+                student.getStatus()
+        );
+    }
+
+    @Test
+    void shouldThrowWhenStudentAlreadySuspended() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.SUSPENDED);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        assertThrows(
+                StudentStatusChangeNotAllowedException.class,
+                () -> studentService.suspendStudent(studentId)
+        );
+    }
+
+    @Test
+    void shouldThrowWhenSuspendingGraduatedStudent() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.GRADUATED);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        assertThrows(
+                StudentStatusChangeNotAllowedException.class,
+                () -> studentService.suspendStudent(studentId)
+        );
+    }
+
+    @Test
+    void shouldActivateStudent() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.SUSPENDED);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        studentService.activateStudent(studentId);
+
+        assertEquals(
+                StudentStatus.ACTIVE,
+                student.getStatus()
+        );
+    }
+
+    @Test
+    void shouldThrowWhenStudentAlreadyActive() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.ACTIVE);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        assertThrows(
+                StudentStatusChangeNotAllowedException.class,
+                () -> studentService.activateStudent(studentId)
+        );
+    }
+
+    @Test
+    void shouldThrowWhenActivatingGraduatedStudent() {
+
+        Integer studentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        student.setStatus(StudentStatus.GRADUATED);
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        assertThrows(
+                StudentStatusChangeNotAllowedException.class,
+                () -> studentService.activateStudent(studentId)
+        );
+    }
+
 }

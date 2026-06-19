@@ -25,41 +25,41 @@ public class StudentController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<Student>>> getAllStudents(
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC)
-            Pageable pageable){
+            Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.ok(studentService.getAllStudents(pageable)));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<Student>> getStudentById(@PathVariable Integer id){
-       return ResponseEntity.ok(ApiResponse.ok(studentService.getStudentById(id)));
+    public ResponseEntity<ApiResponse<Student>> getStudentById(@PathVariable Integer id) {
+        return ResponseEntity.ok(ApiResponse.ok(studentService.getStudentById(id)));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable Integer id){
+    public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable Integer id) {
         studentService.deleteStudent(id);
         return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>> addStudentRequest(@RequestBody @Valid StudentRequest request){
+    public ResponseEntity<ApiResponse<Void>> addStudentRequest(@RequestBody @Valid StudentRequest request) {
         studentService.addStudentRequest(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created(null));
     }
 
     @PutMapping("{id}")
     public ResponseEntity<ApiResponse<Void>> updateStudentRequest(@PathVariable Integer id,
-                                     @RequestBody @Valid StudentRequest request){
+                                                                  @RequestBody @Valid StudentRequest request) {
         studentService.updateStudentRequest(id, request);
         return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
     @GetMapping("/search/name")
-    public ResponseEntity<ApiResponse<List<Student>>> searchStudentsByName(@RequestParam String name){
-         return ResponseEntity.ok(ApiResponse.ok(studentService.searchStudentsByName(name)));
+    public ResponseEntity<ApiResponse<List<Student>>> searchStudentsByName(@RequestParam String name) {
+        return ResponseEntity.ok(ApiResponse.ok(studentService.searchStudentsByName(name)));
     }
 
     @GetMapping("/search/email")
-    public  ResponseEntity<ApiResponse<List<Student>>> searchStudentsByEmail(@RequestParam String email){
+    public ResponseEntity<ApiResponse<List<Student>>> searchStudentsByEmail(@RequestParam String email) {
         return ResponseEntity.ok(ApiResponse.ok(studentService.searchStudentsByEmail(email)));
     }
 
@@ -69,6 +69,42 @@ public class StudentController {
     ) {
 
         studentService.graduateStudent(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok(null)
+        );
+    }
+
+    @PatchMapping("{id}/suspend")
+    public ResponseEntity<ApiResponse<Void>> suspendStudent(@PathVariable Integer id) {
+
+        studentService.suspendStudent(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok(null));
+    }
+
+    @PatchMapping("{id}/activate")
+    public ResponseEntity<ApiResponse<Void>> activateStudent(@PathVariable Integer id) {
+
+        studentService.activateStudent(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.ok(null));
+    }
+
+    @PatchMapping(
+            "{studentId}/department/{departmentId}"
+    )
+    public ResponseEntity<ApiResponse<Void>> assignDepartment(
+            @PathVariable Integer studentId,
+            @PathVariable Integer departmentId
+    ) {
+
+        studentService.assignDepartment(
+                studentId,
+                departmentId
+        );
 
         return ResponseEntity.ok(
                 ApiResponse.ok(null)

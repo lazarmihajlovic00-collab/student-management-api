@@ -1,5 +1,6 @@
 package com.student.student;
 
+import com.student.department.Department;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -23,6 +24,9 @@ public class Student {
     private LocalDate enrollmentDate;
 
     private LocalDate graduationDate;
+
+    @ManyToOne
+    private Department department;
 
     public Student(Integer id, String name, String email, Integer age) {
         this.id = id;
@@ -88,6 +92,14 @@ public class Student {
 
     public void setGraduationDate(LocalDate graduationDate) {
         this.graduationDate = graduationDate;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override

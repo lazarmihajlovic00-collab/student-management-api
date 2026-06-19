@@ -120,5 +120,15 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(StudentStatusChangeNotAllowedException.class)
+    public ResponseEntity<ErrorResponse>  handleStudentStatusChangeNotAllowed(
+            StudentStatusChangeNotAllowedException ex){
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+    }
+
 
 }

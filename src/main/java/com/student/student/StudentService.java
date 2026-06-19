@@ -1,8 +1,8 @@
 package com.student.student;
 
-import com.student.exception.EmailAlreadyExistsException;
-import com.student.exception.StudentAlreadyGraduatedException;
-import com.student.exception.StudentNotFoundException;
+import com.student.department.Department;
+import com.student.department.DepartmentRepository;
+import com.student.exception.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -16,9 +16,11 @@ import java.util.List;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, DepartmentRepository departmentRepository) {
         this.studentRepository = studentRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public Page<Student> getAllStudents(Pageable pageable){
@@ -104,6 +106,95 @@ public class StudentService {
 
         student.setStatus(StudentStatus.GRADUATED);
         student.setGraduationDate(LocalDate.now());
+    }
+
+    @Transactional
+    public void suspendStudent(Integer id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with id " + id + " not found"
+                        )
+                );
+        if (student.getStatus() == StudentStatus.SUSPENDED) {
+
+            throw new StudentStatusChangeNotAllowedException(
+                    "Student with id " + id + " is already suspended"
+            );
+        }
+        if (student.getStatus() == StudentStatus.GRADUATED) {
+
+            throw new StudentStatusChangeNotAllowedException(
+                    "Graduated student cannot be suspended"
+            );
+        }
+        student.setStatus(StudentStatus.SUSPENDED);
+    }
+
+    @Transactional
+    public void activateStudent(Integer id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with id " + id + " not found"
+                        )
+                );
+        if (student.getStatus() == StudentStatus.ACTIVE) {
+
+            throw new StudentStatusChangeNotAllowedException(
+                    "Student is already active"
+            );
+        }
+        if (student.getStatus() == StudentStatus.GRADUATED) {
+
+            throw new StudentStatusChangeNotAllowedException(
+                    "Graduated student cannot be activated"
+            );
+        }
+        student.setStatus(StudentStatus.ACTIVE);
+    }
+
+    @Transactional
+    public void assignDepartment(
+            Integer studentId,
+            Integer departmentId
+    ) {
+
+        Student student =
+                studentRepository.findById(studentId)
+                        .orElseThrow(
+                                () ->
+                                        new StudentNotFoundException(
+                                                "Student with id "
+                                                        + studentId
+                                                        + " not found"
+                                        )
+                        );
+
+        Department department =
+                departmentRepository.findById(departmentId)
+                        .orElseThrow(
+                                () ->
+                                        new DepartmentNotFoundException(
+                                                "Department with id "
+                                                        + departmentId
+                                                        + " not found"
+                                        )
+                        );
+
+        if (
+                student.getStatus()
+                        == StudentStatus.GRADUATED
+        ) {
+
+            throw new StudentStatusChangeNotAllowedException(
+                    "Graduated students cannot change department"
+            );
+        }
+
+        student.setDepartment(
+                department
+        );
     }
 
 }

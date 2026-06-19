@@ -60,6 +60,32 @@ public class SecurityConfig {
                                 "/api/students/*/graduate")
                         .hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/students/*/suspend")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/students/*/activate")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/departments/**"
+                        )
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/departments/**"
+                        )
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/students/*/department/*"
+                        )
+                        .hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 );
 
