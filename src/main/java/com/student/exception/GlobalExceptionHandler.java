@@ -130,5 +130,24 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(DepartmentAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleDepartmentAlreadyExists(
+            DepartmentAlreadyExistsException ex
+    ){
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDepartmentNotFound(
+            DepartmentNotFoundException ex
+    ){
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+    }
 
 }
