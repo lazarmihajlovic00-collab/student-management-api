@@ -592,6 +592,7 @@ class StudentServiceTest {
 
         Course course = new Course();
         course.setId(1);
+        course.setCredits(6);
 
         when(studentRepository.findById(1))
                 .thenReturn(Optional.of(student));

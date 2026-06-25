@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/departments")
+@RequestMapping("/api/courses")
 public class CourseController {
 
     private final CourseService courseService;
