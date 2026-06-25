@@ -150,4 +150,54 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(CourseAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleCourseAlreadyExists(
+            CourseAlreadyExistsException ex
+    ){
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCourseNotFound(
+            CourseNotFoundException ex
+    ){
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(CourseAlreadyAssignedException.class)
+    public ResponseEntity<ErrorResponse> handleCourseAlreadyAssigned(
+            CourseAlreadyAssignedException ex) {
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(CourseAssignmentNotAllowedException.class)
+    public ResponseEntity<ErrorResponse> handleCourseAssignmentNotAllowed(
+            CourseAssignmentNotAllowedException ex) {
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(CreditLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleCreditLimitExceeded(
+            CreditLimitExceededException ex) {
+
+        return buildErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                ex.getMessage()
+        );
+    }
+
 }

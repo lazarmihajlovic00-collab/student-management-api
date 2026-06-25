@@ -1,10 +1,13 @@
 package com.student.student;
 
+import com.student.course.Course;
 import com.student.department.Department;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Student {
@@ -27,6 +30,14 @@ public class Student {
 
     @ManyToOne
     private Department department;
+
+    @ManyToMany
+    @JoinTable(
+            name = "student_courses",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses = new HashSet<>();
 
     public Student(Integer id, String name, String email, Integer age) {
         this.id = id;
@@ -102,6 +113,14 @@ public class Student {
         this.department = department;
     }
 
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,4 +133,5 @@ public class Student {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

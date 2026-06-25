@@ -111,4 +111,13 @@ public class StudentController {
         );
     }
 
+    @PatchMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<ApiResponse<Void>> assignCourse(
+            @PathVariable Integer studentId,
+            @PathVariable Integer courseId) {
+
+        studentService.assignCourse(studentId, courseId);
+
+        return ResponseEntity.ok(ApiResponse.ok(null));
+    }
 }

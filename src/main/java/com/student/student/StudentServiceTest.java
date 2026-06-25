@@ -1,9 +1,10 @@
 package com.student.student;
 
-import com.student.exception.EmailAlreadyExistsException;
-import com.student.exception.StudentAlreadyGraduatedException;
-import com.student.exception.StudentNotFoundException;
-import com.student.exception.StudentStatusChangeNotAllowedException;
+import com.student.course.Course;
+import com.student.course.CourseRepository;
+import com.student.department.Department;
+import com.student.department.DepartmentRepository;
+import com.student.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -25,8 +25,14 @@ class StudentServiceTest {
     @Mock
     private StudentRepository studentRepository;
 
+    @Mock
+    private DepartmentRepository departmentRepository;
+
     @InjectMocks
     private StudentService studentService;
+
+    @Mock
+    private CourseRepository courseRepository;
 
     @Test
     void shouldReturnStudentWhenIdExists() {
@@ -447,6 +453,237 @@ class StudentServiceTest {
         assertThrows(
                 StudentStatusChangeNotAllowedException.class,
                 () -> studentService.activateStudent(studentId)
+        );
+    }
+
+    @Test
+    void shouldAssignDepartment() {
+
+        Integer studentId = 1;
+        Integer departmentId = 1;
+
+        Student student = new Student(
+                studentId,
+                "Lazar",
+                "lazar@mail.com",
+                20
+        );
+
+        Department department =
+                new Department();
+
+        department.setId(departmentId);
+        department.setName("Software Engineering");
+        department.setCode("SE");
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        when(departmentRepository.findById(departmentId))
+                .thenReturn(Optional.of(department));
+
+        studentService.assignDepartment(
+                studentId,
+                departmentId
+        );
+
+        assertEquals(
+                department,
+                student.getDepartment()
+        );
+    }
+
+    @Test
+    void shouldThrowWhenAssigningDepartmentToNonExistingStudent() {
+
+        Integer studentId = 1;
+        Integer departmentId = 1;
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                StudentNotFoundException.class,
+                () -> studentService.assignDepartment(
+                        studentId,
+                        departmentId
+                )
+        );
+
+        verify(departmentRepository, never())
+                .findById(anyInt());
+    }
+
+    @Test
+    void shouldThrowWhenDepartmentDoesNotExist() {
+
+        Integer studentId = 1;
+        Integer departmentId = 1;
+
+        Student student =
+                new Student(
+                        studentId,
+                        "Lazar",
+                        "lazar@mail.com",
+                        20
+                );
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        when(departmentRepository.findById(departmentId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                DepartmentNotFoundException.class,
+                () -> studentService.assignDepartment(
+                        studentId,
+                        departmentId
+                )
+        );
+    }
+
+    @Test
+    void shouldThrowWhenAssigningDepartmentToGraduatedStudent() {
+
+        Integer studentId = 1;
+        Integer departmentId = 1;
+
+        Student student =
+                new Student(
+                        studentId,
+                        "Lazar",
+                        "lazar@mail.com",
+                        20
+                );
+
+        student.setStatus(
+                StudentStatus.GRADUATED
+        );
+
+        Department department =
+                new Department();
+
+        department.setId(departmentId);
+        department.setName("Software Engineering");
+        department.setCode("SE");
+
+        when(studentRepository.findById(studentId))
+                .thenReturn(Optional.of(student));
+
+        when(departmentRepository.findById(departmentId))
+                .thenReturn(Optional.of(department));
+
+        assertThrows(
+                StudentStatusChangeNotAllowedException.class,
+                () -> studentService.assignDepartment(
+                        studentId,
+                        departmentId
+                )
+        );
+    }
+
+    @Test
+    void shouldAssignCourse() {
+
+        Student student = new Student();
+        student.setId(1);
+        student.setStatus(StudentStatus.ACTIVE);
+
+        Course course = new Course();
+        course.setId(1);
+
+        when(studentRepository.findById(1))
+                .thenReturn(Optional.of(student));
+
+        when(courseRepository.findById(1))
+                .thenReturn(Optional.of(course));
+
+        studentService.assignCourse(1, 1);
+
+        assertTrue(student.getCourses().contains(course));
+    }
+
+    @Test
+    void shouldThrowWhenStudentNotFoundDuringCourseAssignment() {
+
+        when(studentRepository.findById(1))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                StudentNotFoundException.class,
+                () -> studentService.assignCourse(1, 1)
+        );
+    }
+
+    @Test
+    void shouldThrowWhenCourseNotFound() {
+
+        Student student = new Student();
+        student.setId(1);
+
+        when(studentRepository.findById(1))
+                .thenReturn(Optional.of(student));
+
+        when(courseRepository.findById(1))
+                .thenReturn(Optional.empty());
+
+        assertThrows(
+                CourseNotFoundException.class,
+                () -> studentService.assignCourse(1, 1)
+        );
+    }
+
+    @Test
+    void shouldThrowWhenCourseAlreadyAssigned() {
+
+        Student student = new Student();
+        student.setId(1);
+        student.setStatus(StudentStatus.ACTIVE);
+
+        Course course = new Course();
+        course.setId(1);
+
+        student.getCourses().add(course);
+
+        when(studentRepository.findById(1))
+                .thenReturn(Optional.of(student));
+
+        when(courseRepository.findById(1))
+                .thenReturn(Optional.of(course));
+
+        assertThrows(
+                CourseAlreadyAssignedException.class,
+                () -> studentService.assignCourse(1, 1)
+        );
+    }
+
+    @Test
+    void shouldThrowWhenCreditLimitExceeded() {
+
+        Student student = new Student();
+        student.setId(1);
+        student.setStatus(StudentStatus.ACTIVE);
+
+        Course existingCourse = new Course();
+        existingCourse.setId(1);
+        existingCourse.setCredits(55);
+
+        student.getCourses().add(existingCourse);
+
+        Course newCourse = new Course();
+        newCourse.setId(2);
+        newCourse.setCredits(10);
+
+        when(studentRepository.findById(1))
+                .thenReturn(Optional.of(student));
+
+        when(courseRepository.findById(2))
+                .thenReturn(Optional.of(newCourse));
+
+        assertThrows(
+                CreditLimitExceededException.class,
+                () -> studentService.assignCourse(1, 2)
         );
     }
 

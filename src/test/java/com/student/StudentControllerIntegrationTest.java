@@ -553,7 +553,141 @@ class StudentControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void shouldAssignDepartmentAsAdmin()
+            throws Exception {
 
+        String token =
+                getAdminToken();
+
+        Department department =
+                new Department();
+
+        department.setName(
+                "Software Engineering"
+        );
+
+        department.setCode(
+                "SE"
+        );
+
+        departmentRepository.save(
+                department
+        );
+
+        Student student =
+                new Student();
+
+        student.setName(
+                "Lazar"
+        );
+
+        student.setEmail(
+                "lazar@mail.com"
+        );
+
+        student.setAge(
+                20
+        );
+
+        student.setStatus(
+                StudentStatus.ACTIVE
+        );
+
+        studentRepository.save(
+                student
+        );
+
+        mockMvc.perform(
+                        patch(
+                                "/api/students/"
+                                        + student.getId()
+                                        + "/department/"
+                                        + department.getId()
+                        )
+                                .header(
+                                        "Authorization",
+                                        "Bearer " + token
+                                )
+                )
+                .andExpect(
+                        status().isOk()
+                );
+
+        Student updatedStudent =
+                studentRepository.findById(
+                        student.getId()
+                ).orElseThrow();
+
+        assertEquals(
+                department.getId(),
+                updatedStudent
+                        .getDepartment()
+                        .getId()
+        );
+    }
+
+    @Test
+    void shouldReturnForbiddenWhenUserAssignsDepartment()
+            throws Exception {
+
+        String token =
+                getUserToken();
+
+        Department department =
+                new Department();
+
+        department.setName(
+                "Software Engineering"
+        );
+
+        department.setCode(
+                "SE"
+        );
+
+        departmentRepository.save(
+                department
+        );
+
+        Student student =
+                new Student();
+
+        student.setName(
+                "Lazar"
+        );
+
+        student.setEmail(
+                "lazar@mail.com"
+        );
+
+        student.setAge(
+                20
+        );
+
+        student.setStatus(
+                StudentStatus.ACTIVE
+        );
+
+        studentRepository.save(
+                student
+        );
+
+        mockMvc.perform(
+                        patch(
+                                "/api/students/"
+                                        + student.getId()
+                                        + "/department/"
+                                        + department.getId()
+                        )
+                                .header(
+                                        "Authorization",
+                                        "Bearer " + token
+                                )
+                )
+                .andExpect(
+                        status().isForbidden()
+                );
+    }
 
 
 

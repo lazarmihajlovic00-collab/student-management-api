@@ -29,20 +29,10 @@ public class DepartmentService {
             );
         }
 
-        Department department =
-                new Department();
-
-        department.setName(
-                request.getName()
-        );
-
-        department.setCode(
-                request.getCode()
-        );
-
-        departmentRepository.save(
-                department
-        );
+        Department department = new Department();
+        department.setName(request.getName());
+        department.setCode(request.getCode());
+        departmentRepository.save(department);
     }
 
     public Department getDepartmentById(

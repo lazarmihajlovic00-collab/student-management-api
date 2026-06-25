@@ -86,6 +86,10 @@ public class SecurityConfig {
                         )
                         .hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/students/*/courses/*")
+                        .hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 );
 
