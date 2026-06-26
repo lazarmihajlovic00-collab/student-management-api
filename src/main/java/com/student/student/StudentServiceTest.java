@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -263,6 +265,15 @@ class StudentServiceTest {
 
         when(studentRepository.findById(studentId))
                 .thenReturn(Optional.of(student));
+
+        Course course1 = new Course();
+        course1.setCredits(90);
+
+        Course course2 = new Course();
+        course2.setCredits(90);
+
+        student.getCourses().add(course1);
+        student.getCourses().add(course2);
 
         studentService.graduateStudent(studentId);
 
@@ -589,16 +600,25 @@ class StudentServiceTest {
         Student student = new Student();
         student.setId(1);
         student.setStatus(StudentStatus.ACTIVE);
+        Department department = new Department();
+        department.setId(1);
+
+        student.setDepartment(department);
 
         Course course = new Course();
         course.setId(1);
         course.setCredits(6);
+        course.setDepartment(department);
+        course.setStudents(new HashSet<>());
+        course.setMaxStudents(30);
 
         when(studentRepository.findById(1))
                 .thenReturn(Optional.of(student));
 
         when(courseRepository.findById(1))
                 .thenReturn(Optional.of(course));
+
+
 
         studentService.assignCourse(1, 1);
 
@@ -642,8 +662,16 @@ class StudentServiceTest {
         student.setId(1);
         student.setStatus(StudentStatus.ACTIVE);
 
+        Department department = new Department();
+        department.setId(1);
+
+        student.setDepartment(department);
+
         Course course = new Course();
         course.setId(1);
+        course.setDepartment(department);
+        course.setStudents(new HashSet<>());
+        course.setMaxStudents(30);
 
         student.getCourses().add(course);
 
@@ -666,21 +694,32 @@ class StudentServiceTest {
         student.setId(1);
         student.setStatus(StudentStatus.ACTIVE);
 
+        Department department = new Department();
+        department.setId(1);
+
+        student.setDepartment(department);
+
         Course existingCourse = new Course();
         existingCourse.setId(1);
         existingCourse.setCredits(55);
+
 
         student.getCourses().add(existingCourse);
 
         Course newCourse = new Course();
         newCourse.setId(2);
         newCourse.setCredits(10);
+        newCourse.setDepartment(department);
+        newCourse.setStudents(new HashSet<>());
+        newCourse.setMaxStudents(30);
 
         when(studentRepository.findById(1))
                 .thenReturn(Optional.of(student));
 
         when(courseRepository.findById(2))
                 .thenReturn(Optional.of(newCourse));
+
+
 
         assertThrows(
                 CreditLimitExceededException.class,

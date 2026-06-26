@@ -27,6 +27,7 @@ public class CourseService {
         course.setName(request.getName());
         course.setCode(request.getCode());
         course.setCredits(request.getCredits());
+        course.setMaxStudents(request.getMaxStudents());
 
         courseRepository.save(course);
     }

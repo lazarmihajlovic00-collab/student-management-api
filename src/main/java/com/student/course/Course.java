@@ -21,8 +21,13 @@ public class Course {
 
     private Integer credits;
 
+    private Integer maxStudents;
+
     @ManyToMany(mappedBy = "courses")
     private Set<Student> students = new HashSet<>();
+
+    @ManyToOne
+    private Department department;
 
     public Course() {}
 
@@ -73,15 +78,32 @@ public class Course {
         this.students = students;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public Integer getMaxStudents() {
+        return maxStudents;
+    }
+
+    public void setMaxStudents(Integer maxStudents) {
+        this.maxStudents = maxStudents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Course that)) return false;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Course course)) return false;
+
+        return id != null && id.equals(course.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return getClass().hashCode();
     }
 }

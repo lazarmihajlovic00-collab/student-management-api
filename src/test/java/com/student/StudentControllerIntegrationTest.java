@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.student.auth.LoginRequest;
 import com.student.auth.RegisterRequest;
+import com.student.course.Course;
+import com.student.course.CourseRepository;
 import com.student.department.Department;
 import com.student.department.DepartmentRepository;
 import com.student.department.DepartmentRequest;
@@ -24,6 +26,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import com.student.student.StudentRequest;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -55,6 +60,9 @@ class StudentControllerIntegrationTest {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @BeforeEach
     void cleanDatabase() {
@@ -256,6 +264,18 @@ class StudentControllerIntegrationTest {
         student.setEmail("student@mail.com");
         student.setAge(20);
         student.setStatus(StudentStatus.ACTIVE);
+        //
+        Course course1 = new Course();
+        course1.setCredits(90);
+        Course course2 = new Course();
+        course2.setCredits(90);
+        course1 = courseRepository.save(course1);
+        course2 = courseRepository.save(course2);
+        Set<Course> courses = new HashSet<Course>();
+        courses.add(course1);
+        courses.add(course2);
+        student.setCourses(courses);
+        //
 
         studentRepository.save(student);
 

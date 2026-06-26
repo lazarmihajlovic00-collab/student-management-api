@@ -14,6 +14,9 @@ public class CourseRequest {
     @NotNull
     private Integer credits;
 
+    @NotNull
+    private Integer maxStudents;
+
     public String getCode() {
         return code;
     }
@@ -36,5 +39,13 @@ public class CourseRequest {
 
     public void setCredits(Integer credits) {
         this.credits = credits;
+    }
+
+    public Integer getMaxStudents() {
+        return maxStudents;
+    }
+
+    public void setMaxStudents(Integer maxStudents) {
+        this.maxStudents = maxStudents;
     }
 }

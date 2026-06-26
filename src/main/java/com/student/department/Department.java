@@ -1,5 +1,6 @@
 package com.student.department;
 
+import com.student.course.Course;
 import com.student.student.Student;
 import jakarta.persistence.*;
 
@@ -21,6 +22,9 @@ public class Department {
 
     @OneToMany(mappedBy = "department")
     private List<Student> students = new ArrayList<>();
+
+    @OneToMany(mappedBy = "department")
+    private List<Course> courses = new ArrayList<>();
 
     public Department() {
     }
@@ -65,15 +69,24 @@ public class Department {
         this.students = students;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Department that)) return false;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Department department)) return false;
+
+        return id != null && id.equals(department.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return getClass().hashCode();
     }
 }

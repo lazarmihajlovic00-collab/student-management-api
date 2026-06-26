@@ -17,6 +17,9 @@ import java.util.List;
 @Service
 public class StudentService {
 
+    private static final int REQUIRED_CREDITS_FOR_GRADUATION = 180;
+    private static final int MAX_SEMESTER_CREDITS = 60;
+
     private final StudentRepository studentRepository;
     private final DepartmentRepository departmentRepository;
     private final CourseRepository courseRepository;
@@ -102,9 +105,25 @@ public class StudentService {
                 );
 
         if (student.getStatus() == StudentStatus.GRADUATED) {
-
             throw new StudentAlreadyGraduatedException(
                     "Student has already graduated"
+            );
+        }
+
+        if (student.getStatus() == StudentStatus.SUSPENDED) {
+            throw new StudentStatusChangeNotAllowedException(
+                    "Suspended student cannot graduate"
+            );
+        }
+
+        int totalCredits = student.getCourses()
+                .stream()
+                .mapToInt(Course::getCredits)
+                .sum();
+
+        if (totalCredits < REQUIRED_CREDITS_FOR_GRADUATION) {
+            throw new StudentStatusChangeNotAllowedException(
+                    "Student does not have enough credits to graduate"
             );
         }
 
@@ -164,39 +183,31 @@ public class StudentService {
             Integer departmentId
     ) {
 
-        Student student =
-                studentRepository.findById(studentId)
-                        .orElseThrow(
-                                () ->
-                                        new StudentNotFoundException(
-                                                "Student with id "
-                                                        + studentId
-                                                        + " not found"
-                                        )
-                        );
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with id "
+                                        + studentId
+                                        + " not found"
+                        )
+                );
 
-        Department department =
-                departmentRepository.findById(departmentId)
-                        .orElseThrow(
-                                () ->
-                                        new DepartmentNotFoundException(
-                                                "Department with id "
-                                                        + departmentId
-                                                        + " not found"
-                                        )
-                        );
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() ->
+                        new DepartmentNotFoundException(
+                                "Department with id "
+                                        + departmentId
+                                        + " not found"
+                        )
+                );
 
-        if (
-                student.getStatus()
-                        == StudentStatus.GRADUATED
-        ) {
-
+        if (student.getStatus() == StudentStatus.GRADUATED) {
             throw new StudentStatusChangeNotAllowedException(
                     "Graduated students cannot change department"
             );
         }
 
-        if(student.getDepartment() != null
+        if (student.getDepartment() != null
                 && student.getDepartment().getId().equals(departmentId)) {
 
             throw new StudentStatusChangeNotAllowedException(
@@ -204,9 +215,13 @@ public class StudentService {
             );
         }
 
-        student.setDepartment(
-                department
-        );
+        if (student.getDepartment() != null) {
+            student.getDepartment().getStudents().remove(student);
+        }
+
+        student.setDepartment(department);
+
+        department.getStudents().add(student);
     }
 
     @Transactional
@@ -215,43 +230,59 @@ public class StudentService {
             Integer courseId
     ) {
 
-        Student student =
-                studentRepository.findById(studentId)
-                        .orElseThrow(
-                                () -> new StudentNotFoundException(
-                                        "Student with id "
-                                                + studentId
-                                                + " not found"
-                                )
-                        );
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() ->
+                        new StudentNotFoundException(
+                                "Student with id "
+                                        + studentId
+                                        + " not found"
+                        )
+                );
 
-        Course course =
-                courseRepository.findById(courseId)
-                        .orElseThrow(
-                                () -> new CourseNotFoundException(
-                                        "Course with id "
-                                                + courseId
-                                                + " not found"
-                                )
-                        );
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() ->
+                        new CourseNotFoundException(
+                                "Course with id "
+                                        + courseId
+                                        + " not found"
+                        )
+                );
 
-        if (
-                student.getStatus()
-                        == StudentStatus.GRADUATED
-        ) {
-
+        if (student.getStatus() == StudentStatus.GRADUATED) {
             throw new CourseAssignmentNotAllowedException(
                     "Graduated students cannot enroll courses"
             );
         }
 
-        if (
-                student.getCourses()
-                        .contains(course)
-        ) {
+        if (student.getDepartment() == null) {
+            throw new CourseAssignmentNotAllowedException(
+                    "Student must be assigned to a department first"
+            );
+        }
 
+        if (course.getDepartment() == null) {
+            throw new CourseAssignmentNotAllowedException(
+                    "Course is not assigned to any department"
+            );
+        }
+
+        if (!course.getDepartment().getId()
+                .equals(student.getDepartment().getId())) {
+
+            throw new CourseAssignmentNotAllowedException(
+                    "Course does not belong to student's department"
+            );
+        }
+
+        if (student.getCourses().contains(course)) {
             throw new CourseAlreadyAssignedException(
                     "Course already assigned"
+            );
+        }
+
+        if (course.getStudents().size() >= course.getMaxStudents()) {
+            throw new CourseAssignmentNotAllowedException(
+                    "Course is full"
             );
         }
 
@@ -260,12 +291,17 @@ public class StudentService {
                 .mapToInt(Course::getCredits)
                 .sum();
 
-        if (totalCredits + course.getCredits() > 60) {
+        if (totalCredits + course.getCredits() > MAX_SEMESTER_CREDITS) {
             throw new CreditLimitExceededException(
-                    "Maximum credit limit exceeded");
+                    "Maximum credit limit exceeded"
+            );
         }
 
         student.getCourses().add(course);
+
+        if (!course.getStudents().contains(student)) {
+            course.getStudents().add(student);
+        }
     }
 
 }
