@@ -1,25 +1,32 @@
 package com.student.student;
 
+import com.student.common.BaseEntity;
 import com.student.course.Course;
 import com.student.department.Department;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Student {
+@Table(name = "students")
+@SQLDelete(sql = "UPDATE students SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class Student extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String name;
+    private Integer id;
+
+    private String name;
 
     @Column(unique = true)
-    String email;
+    private String email;
 
-    Integer age;
+    private Integer age;
 
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
@@ -39,14 +46,14 @@ public class Student {
     )
     private Set<Course> courses = new HashSet<>();
 
+    public Student() {
+    }
+
     public Student(Integer id, String name, String email, Integer age) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.age = age;
-    }
-
-    public Student() {
     }
 
     public Integer getId() {
@@ -126,12 +133,11 @@ public class Student {
         if (this == o) return true;
         if (!(o instanceof Student student)) return false;
 
-        return id != null && id.equals(student.id);
+        return id != null && id.equals(student.getId());
     }
 
     @Override
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

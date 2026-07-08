@@ -17,27 +17,15 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>>
-    createCourse(
-            @RequestBody
-            @Valid
-            CourseRequest request
-    ) {
-
-        courseService.createCourse(
-                request
-        );
-
+    public ResponseEntity<ApiResponse<Void>> createCourse(@Valid @RequestBody CourseRequest request) {
+        courseService.createCourse(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.created(null));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Course>> getCourse(
-            @PathVariable Integer id){
-        return ResponseEntity
-                .ok(ApiResponse.ok(courseService.getCourseById(id)));
+    public ResponseEntity<ApiResponse<CourseResponse>> getCourse(@PathVariable Integer id) {
+        return ResponseEntity.ok(ApiResponse.ok(courseService.getCourseResponseById(id)));
     }
-
 }

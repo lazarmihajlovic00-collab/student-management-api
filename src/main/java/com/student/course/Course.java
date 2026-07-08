@@ -1,15 +1,20 @@
 package com.student.course;
 
+import com.student.common.BaseEntity;
 import com.student.department.Department;
 import com.student.student.Student;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Course {
+@Table(name = "courses")
+@SQLDelete(sql = "UPDATE courses SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class Course extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,7 +104,7 @@ public class Course {
         if (this == o) return true;
         if (!(o instanceof Course course)) return false;
 
-        return id != null && id.equals(course.id);
+        return id != null && id.equals(course.getId());
     }
 
     @Override

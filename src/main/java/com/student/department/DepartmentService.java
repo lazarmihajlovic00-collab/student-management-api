@@ -3,30 +3,21 @@ package com.student.department;
 import com.student.exception.DepartmentAlreadyExistsException;
 import com.student.exception.DepartmentNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
-    public DepartmentService(
-            DepartmentRepository departmentRepository
-    ) {
+    public DepartmentService(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
     }
 
-    public void createDepartment(
-            DepartmentRequest request
-    ) {
-
-        if (
-                departmentRepository.existsByCode(
-                        request.getCode()
-                )
-        ) {
-            throw new DepartmentAlreadyExistsException(
-                    "Department code already exists"
-            );
+    public void createDepartment(DepartmentRequest request) {
+        if (departmentRepository.existsByCode(request.getCode())) {
+            throw new DepartmentAlreadyExistsException("Department code already exists");
         }
 
         Department department = new Department();
@@ -35,18 +26,10 @@ public class DepartmentService {
         departmentRepository.save(department);
     }
 
-    public Department getDepartmentById(
-            Integer id
-    ) {
-
-        return departmentRepository.findById(id)
-                .orElseThrow(
-                        () ->
-                                new DepartmentNotFoundException(
-                                        "Department with id "
-                                                + id
-                                                + " not found"
-                                )
-                );
+    @Transactional(readOnly = true)
+    public DepartmentResponse getDepartmentResponseById(Integer id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new DepartmentNotFoundException("Department not found with id " + id));
+        return new DepartmentResponse(department);
     }
 }

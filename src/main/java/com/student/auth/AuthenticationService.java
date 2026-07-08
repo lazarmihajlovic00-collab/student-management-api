@@ -4,29 +4,38 @@ import com.student.exception.EmailAlreadyExistsException;
 import com.student.exception.InvalidCredentialsException;
 import com.student.exception.InvalidRefreshTokenException;
 import com.student.refreshtoken.RefreshToken;
+import com.student.refreshtoken.RefreshTokenRepository;
 import com.student.refreshtoken.RefreshTokenRequest;
 import com.student.refreshtoken.RefreshTokenService;
 import com.student.user.Role;
 import com.student.user.User;
 import com.student.user.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AuthenticationService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
-
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public AuthenticationService(UserRepository userRepository, JwtService jwtService,
-                                 PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
+                                 PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService,
+                                 RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenService = refreshTokenService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -46,6 +55,7 @@ public class AuthenticationService {
         return new AuthenticationResponse(accessToken, refreshToken.getToken());
     }
 
+    @Transactional(readOnly = true)
     public AuthenticationResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new InvalidCredentialsException("Invalid credentials"));
@@ -76,4 +86,17 @@ public class AuthenticationService {
         refreshTokenService.revokeRefreshToken(request.getRefreshToken());
     }
 
+    public void logout(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwt = token.substring(7);
+            String email = jwtService.extractEmail(jwt);
+
+            if (email != null) {
+                userRepository.findByEmail(email).ifPresent(user -> {
+                    refreshTokenRepository.deleteByUserId(user.getId());
+                    log.info("Korisnik {} se uspešno odjavio. Refresh tokeni su obrisani iz baze.", email);
+                });
+            }
+        }
+    }
 }

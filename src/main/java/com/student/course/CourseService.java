@@ -2,11 +2,11 @@ package com.student.course;
 
 import com.student.exception.CourseAlreadyExistsException;
 import com.student.exception.CourseNotFoundException;
-import com.student.student.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional 
 public class CourseService {
 
     private final CourseRepository courseRepository;
@@ -16,11 +16,8 @@ public class CourseService {
     }
 
     public void createCourse(CourseRequest request) {
-
-        if(courseRepository.existsByCode(request.getCode())) {
-            throw new CourseAlreadyExistsException(
-                    "Course code already exists"
-            );
+        if (courseRepository.existsByCode(request.getCode())) {
+            throw new CourseAlreadyExistsException("Course code already exists");
         }
 
         Course course = new Course();
@@ -32,9 +29,10 @@ public class CourseService {
         courseRepository.save(course);
     }
 
-    public Course getCourseById(Integer id) {
-        return courseRepository.findById(id).orElseThrow(
-                () -> new CourseNotFoundException("Course with id " + id + " not found")
-        );
+    @Transactional(readOnly = true)
+    public CourseResponse getCourseResponseById(Integer id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new CourseNotFoundException("Course with id " + id + " not found"));
+        return new CourseResponse(course);
     }
 }

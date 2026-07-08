@@ -26,86 +26,64 @@ class DepartmentServiceTest {
     @Test
     void shouldCreateDepartment() {
 
-        DepartmentRequest request =
-                new DepartmentRequest();
+        DepartmentRequest request = new DepartmentRequest();
 
         request.setName("Software Engineering");
         request.setCode("SE");
 
-        when(departmentRepository.existsByCode("SE"))
-                .thenReturn(false);
+        when(departmentRepository.existsByCode("SE")).thenReturn(false);
 
         departmentService.createDepartment(request);
 
-        ArgumentCaptor<Department> captor =
-                ArgumentCaptor.forClass(Department.class);
+        ArgumentCaptor<Department> captor = ArgumentCaptor.forClass(Department.class);
 
-        verify(departmentRepository)
-                .save(captor.capture());
+        verify(departmentRepository).save(captor.capture());
 
-        Department savedDepartment =
-                captor.getValue();
+        Department savedDepartment = captor.getValue();
 
-        assertEquals(
-                "Software Engineering",
-                savedDepartment.getName()
-        );
+        assertEquals("Software Engineering", savedDepartment.getName());
 
-        assertEquals(
-                "SE",
-                savedDepartment.getCode()
+        assertEquals("SE", savedDepartment.getCode()
         );
     }
 
     @Test
     void shouldThrowWhenDepartmentCodeAlreadyExists() {
 
-        DepartmentRequest request =
-                new DepartmentRequest();
+        DepartmentRequest request = new DepartmentRequest();
 
         request.setName("Software Engineering");
         request.setCode("SE");
 
-        when(departmentRepository.existsByCode("SE"))
-                .thenReturn(true);
+        when(departmentRepository.existsByCode("SE")).thenReturn(true);
 
-        assertThrows(
-                DepartmentAlreadyExistsException.class,
+        assertThrows(DepartmentAlreadyExistsException.class,
                 () -> departmentService.createDepartment(request)
         );
     }
 
     @Test
     void shouldReturnDepartmentById() {
-
-        Department department =
-                new Department();
-
+        Department department = new Department();
         department.setId(1);
         department.setCode("SE");
         department.setName("Software Engineering");
 
-        when(departmentRepository.findById(1))
-                .thenReturn(Optional.of(department));
+        when(departmentRepository.findById(1)).thenReturn(Optional.of(department));
 
-        Department result =
-                departmentService.getDepartmentById(1);
+        DepartmentResponse result = departmentService.getDepartmentResponseById(1);
 
-        assertEquals(
-                "Software Engineering",
-                result.getName()
-        );
+        assertNotNull(result);
+        assertEquals("Software Engineering", result.getName());
+        assertEquals("SE", result.getCode());
     }
 
     @Test
     void shouldThrowWhenDepartmentNotFound() {
-
         when(departmentRepository.findById(1))
                 .thenReturn(Optional.empty());
 
-        assertThrows(
-                DepartmentNotFoundException.class,
-                () -> departmentService.getDepartmentById(1)
-        );
+        assertThrows(DepartmentNotFoundException.class,
+                () -> departmentService.getDepartmentResponseById(1));
     }
 }

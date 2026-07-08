@@ -38,24 +38,29 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnStudentWhenIdExists() {
-        Student student = new Student(1, "Lazar", "lazar@mail.com", 20);
 
-        when(studentRepository.findById(1))
-                .thenReturn(Optional.of(student));
+        Student student = new Student();
+        student.setId(1);
+        student.setName("Lazar");
+        student.setEmail("lazar@example.com");
 
-        Student result = studentService.getStudentById(1);
+        when(studentRepository.findById(1)).thenReturn(Optional.of(student));
 
+
+        StudentResponse result = studentService.getStudentResponseById(1);
+
+
+        assertNotNull(result);
         assertEquals("Lazar", result.getName());
     }
 
     @Test
     void shouldThrowExceptionWhenStudentNotFound() {
 
-        when(studentRepository.findById(1))
-                .thenReturn(Optional.empty());
+        when(studentRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(StudentNotFoundException.class,
-                () -> studentService.getStudentById(1));
+
+        assertThrows(StudentNotFoundException.class, () -> studentService.getStudentResponseById(1));
     }
 
     @Test

@@ -1,15 +1,20 @@
 package com.student.department;
 
+import com.student.common.BaseEntity;
 import com.student.course.Course;
 import com.student.student.Student;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
-public class Department {
+@Table(name = "departments")
+@SQLDelete(sql = "UPDATE departments SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class Department extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +34,7 @@ public class Department {
     public Department() {
     }
 
-    public Department(Integer id,
-                      String code,
-                      String name) {
+    public Department(Integer id, String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -82,7 +85,7 @@ public class Department {
         if (this == o) return true;
         if (!(o instanceof Department department)) return false;
 
-        return id != null && id.equals(department.id);
+        return id != null && id.equals(department.getId());
     }
 
     @Override

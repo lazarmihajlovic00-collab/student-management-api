@@ -1,20 +1,25 @@
 package com.student.course;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 public class CourseRequest {
 
-    @NotBlank
-    private String code;
-
-    @NotBlank
+    @NotBlank(message = "Naziv kursa je obavezan")
+    @Size(min = 2, max = 100, message = "Naziv kursa mora imati između 2 i 100 karaktera")
     private String name;
 
-    @NotNull
+    @NotBlank(message = "Kod kursa je obavezan")
+    @Size(min = 2, max = 10, message = "Kod kursa mora imati između 2 i 10 karaktera")
+    private String code;
+
+    @NotNull(message = "Broj ESPB bodova je obavezan")
+    @Min(value = 1, message = "Kurs mora nositi najmanje 1 ESPB bod")
+    @Max(value = 30, message = "Kurs ne može nositi više od 30 ESPB bodova")
     private Integer credits;
 
-    @NotNull
+    @NotNull(message = "Maksimalan broj studenata je obavezan")
+    @Min(value = 5, message = "Minimalan kapacitet kursa je 5 studenata")
+    @Max(value = 300, message = "Maksimalan kapacitet kursa je 300 studenata")
     private Integer maxStudents;
 
     public String getCode() {

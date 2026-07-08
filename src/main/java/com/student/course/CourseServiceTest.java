@@ -25,45 +25,35 @@ class CourseServiceTest {
 
     @Test
     void shouldCreateCourse() {
-
         CourseRequest request = new CourseRequest();
-        request.setCode("OOP");
         request.setName("Object Oriented Programming");
+        request.setCode("OOP");
         request.setCredits(6);
+        request.setMaxStudents(50);
 
-        when(courseRepository.existsByCode("OOP"))
-                .thenReturn(false);
+        when(courseRepository.existsByCode("OOP")).thenReturn(false);
 
         courseService.createCourse(request);
 
-        ArgumentCaptor<Course> captor =
-                ArgumentCaptor.forClass(Course.class);
-
+        ArgumentCaptor<Course> captor = ArgumentCaptor.forClass(Course.class);
         verify(courseRepository).save(captor.capture());
 
         Course savedCourse = captor.getValue();
-
+        assertEquals("Object Oriented Programming", savedCourse.getName());
         assertEquals("OOP", savedCourse.getCode());
-        assertEquals(
-                "Object Oriented Programming",
-                savedCourse.getName()
-        );
-        assertEquals(
-                6,
-                savedCourse.getCredits()
-        );
+        assertEquals(6, savedCourse.getCredits());
+        assertEquals(50, savedCourse.getMaxStudents());
     }
 
     @Test
     void shouldThrowWhenCourseCodeAlreadyExists() {
 
         CourseRequest request = new CourseRequest();
-        request.setCode("OOP");
         request.setName("Object Oriented Programming");
-        request.setCredits(6);
+        request.setCode("OOP");
 
-        when(courseRepository.existsByCode("OOP"))
-                .thenReturn(true);
+        when(courseRepository.existsByCode("OOP")).thenReturn(true);
+
 
         assertThrows(
                 CourseAlreadyExistsException.class,
@@ -77,39 +67,31 @@ class CourseServiceTest {
         Course course = new Course();
         course.setId(1);
         course.setCode("OOP");
-        course.setName(
-                "Object Oriented Programming"
-        );
+        course.setName("Object Oriented Programming");
         course.setCredits(6);
+        course.setMaxStudents(50);
 
-        when(courseRepository.findById(1))
-                .thenReturn(Optional.of(course));
+        when(courseRepository.findById(1)).thenReturn(Optional.of(course));
 
-        Course result =
-                courseService.getCourseById(1);
 
+        CourseResponse result = courseService.getCourseResponseById(1);
+
+
+        assertNotNull(result);
         assertEquals("OOP", result.getCode());
-
-        assertEquals(
-                "Object Oriented Programming",
-                result.getName()
-        );
-
-        assertEquals(
-                6,
-                result.getCredits()
-        );
+        assertEquals("Object Oriented Programming", result.getName());
+        assertEquals(6, result.getCredits());
     }
 
     @Test
     void shouldThrowWhenCourseNotFound() {
 
-        when(courseRepository.findById(1))
-                .thenReturn(Optional.empty());
+        when(courseRepository.findById(1)).thenReturn(Optional.empty());
+
 
         assertThrows(
                 CourseNotFoundException.class,
-                () -> courseService.getCourseById(1)
+                () -> courseService.getCourseResponseById(1)
         );
     }
 }

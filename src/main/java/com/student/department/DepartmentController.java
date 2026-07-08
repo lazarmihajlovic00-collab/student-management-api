@@ -12,34 +12,20 @@ public class DepartmentController {
 
     private final DepartmentService departmentService;
 
-    public DepartmentController(
-            DepartmentService departmentService
-    ) {
+    public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>>
-    createDepartment(
-            @RequestBody
-            @Valid
-            DepartmentRequest request
-    ) {
-
-        departmentService.createDepartment(
-                request
-        );
-
+    public ResponseEntity<ApiResponse<Void>> createDepartment(@Valid @RequestBody DepartmentRequest request) {
+        departmentService.createDepartment(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.created(null));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Department>> getDepartment(
-            @PathVariable Integer id){
-        return ResponseEntity
-                .ok(ApiResponse.ok(departmentService.getDepartmentById(id)));
+    @GetMapping("{id}")
+    public ResponseEntity<ApiResponse<DepartmentResponse>> getDepartmentById(@PathVariable Integer id) {
+        return ResponseEntity.ok(ApiResponse.ok(departmentService.getDepartmentResponseById(id)));
     }
-
 }

@@ -7,11 +7,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -29,52 +31,41 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        try {
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractEmail(jwt);
 
-            String token = authHeader.substring(7);
-            String email = jwtService.extractEmail(token);
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            User user = this.userRepository.findByEmail(userEmail).orElse(null);
 
-            if (email != null &&
-                    SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (user != null && jwtService.isTokenValid(jwt, userEmail)) {
 
-                User user = userRepository.findByEmail(email)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                String authorityName = "ROLE_" + user.getRole().name();
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(authorityName);
 
-                if (user != null && jwtService.isTokenValid(token, email)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        Collections.singletonList(authority)
+                );
 
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    email,
-                                    null,
-                                    Collections.singletonList(
-                                            new SimpleGrantedAuthority(
-                                                    "ROLE_" + user.getRole().name()
-                                            )
-                                    )
-                            );
-
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(authToken);
-                }
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
-
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
         }
-
         filterChain.doFilter(request, response);
     }
 }

@@ -66,10 +66,10 @@ class StudentControllerIntegrationTest {
 
     @BeforeEach
     void cleanDatabase() {
-        refreshTokenRepository.deleteAll();
-        studentRepository.deleteAll();
-        departmentRepository.deleteAll();
-        userRepository.deleteAll();
+        refreshTokenRepository.deleteAllInBatch();
+        studentRepository.deleteAllInBatch();
+        departmentRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     private String getAdminToken() throws Exception {
@@ -259,48 +259,42 @@ class StudentControllerIntegrationTest {
         String accessToken = getAdminToken();
 
         Student student = new Student();
-
         student.setName("Lazar");
         student.setEmail("student@mail.com");
         student.setAge(20);
         student.setStatus(StudentStatus.ACTIVE);
-        //
+
         Course course1 = new Course();
+        course1.setCode("CS101");
+        course1.setName("Algoritmi");
         course1.setCredits(90);
+        course1.setMaxStudents(30);
+
         Course course2 = new Course();
+        course2.setCode("CS102");
+        course2.setName("Baze podataka");
         course2.setCredits(90);
+        course2.setMaxStudents(30);
+
         course1 = courseRepository.save(course1);
         course2 = courseRepository.save(course2);
-        Set<Course> courses = new HashSet<Course>();
+
+        Set<Course> courses = new HashSet<>();
         courses.add(course1);
         courses.add(course2);
         student.setCourses(courses);
-        //
 
         studentRepository.save(student);
 
         mockMvc.perform(
-                        patch(
-                                "/api/students/" +
-                                        student.getId() +
-                                        "/graduate"
-                        )
-                                .header(
-                                        "Authorization",
-                                        "Bearer " + accessToken
-                                )
+                        patch("/api/students/" + student.getId() + "/graduate")
+                                .header("Authorization", "Bearer " + accessToken)
                 )
                 .andExpect(status().isOk());
 
-        Student updatedStudent =
-                studentRepository.findById(
-                        student.getId()
-                ).orElseThrow();
+        Student updatedStudent = studentRepository.findById(student.getId()).orElseThrow();
 
-        assertEquals(
-                StudentStatus.GRADUATED,
-                updatedStudent.getStatus()
-        );
+        assertEquals(StudentStatus.GRADUATED, updatedStudent.getStatus());
     }
 
     @Test
