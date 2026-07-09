@@ -96,4 +96,11 @@ public class StudentController {
         studentService.assignCourse(studentId, courseId);
         return ResponseEntity.ok(ApiResponse.ok(null));
     }
+
+    @GetMapping("/{id}/gpa")
+    public ResponseEntity<Double> getStudentGPA(@PathVariable Integer id) {
+        Double gpa = studentService.calculateGPA(id);
+        return ResponseEntity.ok(gpa);
+    }
+
 }

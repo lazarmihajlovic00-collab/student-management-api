@@ -9,6 +9,8 @@ import com.student.course.CourseRepository;
 import com.student.department.Department;
 import com.student.department.DepartmentRepository;
 import com.student.department.DepartmentRequest;
+import com.student.grade.Grade;
+import com.student.grade.GradeRepository;
 import com.student.refreshtoken.*;
 import com.student.student.Student;
 import com.student.student.StudentRepository;
@@ -27,12 +29,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import com.student.student.StudentRequest;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -64,10 +68,15 @@ class StudentControllerIntegrationTest {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private GradeRepository gradeRepository;
+
     @BeforeEach
     void cleanDatabase() {
         refreshTokenRepository.deleteAllInBatch();
+        gradeRepository.deleteAllInBatch();
         studentRepository.deleteAllInBatch();
+        courseRepository.deleteAllInBatch();
         departmentRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
@@ -703,6 +712,33 @@ class StudentControllerIntegrationTest {
                 );
     }
 
+    @Test
+    void shouldCalculateCorrectGPA() throws Exception {
+        String accessToken = getAdminToken();
 
+        Student student = new Student();
+        student.setName("Lazar");
+        student.setEmail("gpa@mail.com");
+        student.setAge(20);
+        student.setStatus(StudentStatus.ACTIVE);
+        student = studentRepository.save(student);
+
+        Course course = new Course();
+        course.setCode("CS101-" + System.currentTimeMillis()); // Unikatni kod
+        course.setName("Math");
+        course.setCredits(5);
+        course.setMaxStudents(30);
+        course = courseRepository.save(course);
+
+        Grade g1 = new Grade(8, student, course, LocalDate.now());
+        Grade g2 = new Grade(10, student, course, LocalDate.now());
+        gradeRepository.save(g1);
+        gradeRepository.save(g2);
+
+        mockMvc.perform(get("/api/students/" + student.getId() + "/gpa")
+                        .header("Authorization", "Bearer " + accessToken))
+                .andExpect(status().isOk())
+                .andExpect(content().string("9.0"));
+    }
 
 }

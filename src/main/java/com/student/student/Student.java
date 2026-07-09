@@ -3,6 +3,7 @@ package com.student.student;
 import com.student.common.BaseEntity;
 import com.student.course.Course;
 import com.student.department.Department;
+import com.student.grade.Grade;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -45,6 +46,10 @@ public class Student extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
     private Set<Course> courses = new HashSet<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Grade> grades = new HashSet<>();
+
 
     public Student() {
     }
@@ -127,6 +132,12 @@ public class Student extends BaseEntity {
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
     }
+
+    public Set<Grade> getGrades() {
+        return grades;
+    }
+
+    public void setGrades(Set<Grade> grades) { this.grades = grades; }
 
     @Override
     public boolean equals(Object o) {

@@ -5,6 +5,7 @@ import com.student.course.CourseRepository;
 import com.student.department.Department;
 import com.student.department.DepartmentRepository;
 import com.student.exception.*;
+import com.student.grade.Grade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional; // <-- ISPRAVLJEN IMPORT
 import org.springframework.data.domain.Page;
@@ -219,4 +220,19 @@ public class StudentService {
             course.getStudents().add(student);
         }
     }
+
+    public Double calculateGPA(Integer studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
+
+        if (student.getGrades().isEmpty()) {
+            return 0.0;
+        }
+
+        return student.getGrades().stream()
+                .mapToInt(Grade::getValue)
+                .average()
+                .orElse(0.0);
+    }
+
 }
