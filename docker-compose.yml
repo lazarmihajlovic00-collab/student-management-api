@@ -1,23 +1,38 @@
 services:
   db:
-    container_name: postgress-spring-boot-student
-    image: postgres:latest
+    container_name: postgres-student-db
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: lazar
       POSTGRES_PASSWORD: password
       POSTGRES_DB: lazardb
-      PGDATA: /data/postgres
     volumes:
-      - db:/data/postgres
+      - db_data:/var/lib/postgresql/data
     ports:
       - "5332:5432"
     networks:
-      - db
+      - student-network
     restart: unless-stopped
+
+  app:
+    container_name: student-management-api
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/lazardb
+      SPRING_DATASOURCE_USERNAME: lazar
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
+    networks:
+      - student-network
+    restart: unless-stopped
+
 networks:
-  db:
+  student-network:
     driver: bridge
+
 volumes:
-  db:
-
-
+  db_data:

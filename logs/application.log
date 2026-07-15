@@ -10389,3 +10389,39 @@ delete from students where (students.deleted = false) [23503-224]
 2026-07-09 04:53:52 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-07-09 04:53:52 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2026-07-09 04:53:52 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-09 05:08:00 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-09 05:08:00 [main] INFO  c.s.StudentControllerIntegrationTest - Starting StudentControllerIntegrationTest using Java 25.0.2 with PID 14632 (started by Mladja in C:\Users\Mladja\IdeaProjects\student-management-api)
+2026-07-09 05:08:00 [main] INFO  c.s.StudentControllerIntegrationTest - The following 1 profile is active: "test"
+2026-07-09 05:08:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-09 05:08:01 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 6 JPA repository interfaces.
+2026-07-09 05:08:02 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-09 05:08:02 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-07-09 05:08:02 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-09 05:08:03 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:testdb (H2 2.2)
+2026-07-09 05:08:03 [main] WARN  o.f.c.i.database.base.Database - Flyway upgrade recommended: H2 2.2.224 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
+2026-07-09 05:08:03 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Schema history table "public"."flyway_schema_history" does not exist yet
+2026-07-09 05:08:03 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.034s)
+2026-07-09 05:08:03 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "public"."flyway_schema_history" ...
+2026-07-09 05:08:03 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-07-09 05:08:03 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version "1 - init schema"
+2026-07-09 05:08:03 [main] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.046s)
+2026-07-09 05:08:03 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-09 05:08:03 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-07-09 05:08:03 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-07-09 05:08:04 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-09 05:08:04 [main] WARN  org.hibernate.dialect.Dialect - HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
+2026-07-09 05:08:04 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-09 05:08:05 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-09 05:08:05 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-09 05:08:06 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-09 05:08:06 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-09 05:08:07 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7f4f432b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@435b944c, org.springframework.security.web.context.SecurityContextHolderFilter@4f091800, org.springframework.security.web.header.HeaderWriterFilter@248e31a1, org.springframework.web.filter.CorsFilter@635900ef, org.springframework.security.web.authentication.logout.LogoutFilter@64903a20, com.student.config.JwtAuthFilter@63437af4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@73daf6a6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@59ea2a36, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@615d74e9, org.springframework.security.web.session.SessionManagementFilter@1b1d2d7b, org.springframework.security.web.access.ExceptionTranslationFilter@15d41953, org.springframework.security.web.access.intercept.AuthorizationFilter@60ab906e]
+2026-07-09 05:08:08 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-07-09 05:08:08 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-07-09 05:08:08 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2026-07-09 05:08:08 [main] INFO  c.s.StudentControllerIntegrationTest - Started StudentControllerIntegrationTest in 8.688 seconds (process running for 10.915)
+2026-07-09 05:08:09 [main] WARN  c.s.exception.GlobalExceptionHandler - Resource missing - Student nije nađen: Student with id 999 not found
+2026-07-09 05:08:11 [main] WARN  c.s.exception.GlobalExceptionHandler - Business rule violation - Student je već diplomirao: Student has already graduated
+2026-07-09 05:08:12 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-09 05:08:12 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-07-09 05:08:12 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
