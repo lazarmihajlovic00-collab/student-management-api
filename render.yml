@@ -1,25 +1,24 @@
 services:
-  # 1. Produkciona PostgreSQL baza
-  - type: db
-    name: student-postgres-prod
-    plan: free
-    databaseName: lazardb
-    user: lazar
-
-  # 2. Web Servis za Spring Boot Aplikaciju
+  # 1. Web Servis za Spring Boot Aplikaciju
   - type: web
     name: student-management-api
     plan: free
-    runtime: docker # Render će sam pročitati tvoj Dockerfile
-    repo: https://github.com/TVOJ_GITHUB_USER/student-management-api # Promeni na svoj repo
+    runtime: docker # Render sam čita moj Dockerfile
+    repo: https://github.com/lazarmihajlovic00-collab/student-management-api # Moj repozitorijum[cite: 2]
     envVars:
       - key: SPRING_DATASOURCE_URL
-        fromGroup: student-db-secrets
-        value: jdbc:postgresql://${student-postgres-prod.DATABASE_HOST}/${student-postgres-prod.DATABASE_NAME}
+        value: jdbc:postgresql://${student_db_host}/${student_db_name}
       - key: SPRING_DATASOURCE_USERNAME
         value: lazar
       - key: SPRING_DATASOURCE_PASSWORD
-        fromGroup: student-db-secrets
-        value: ${student-postgres-prod.DATABASE_PASSWORD}
+        value: password
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
+
+# 2. Produkciona PostgreSQL baza
+databases:
+  - name: student-postgres-prod
+    plan: free
+    databaseName: lazardb
+    user: lazar
+    ipAllowList: [] # Dozvoljava pristup samo mojim servisima unutar Rendera (bezbedno)
