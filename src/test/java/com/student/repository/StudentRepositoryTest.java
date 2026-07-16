@@ -17,12 +17,11 @@ class StudentRepositoryTest {
 
     @Test
     void shouldReturnTrueWhenEmailExists() {
-
-        Student student =
-                new Student(null,
-                        "Lazar",
-                        "lazar@mail.com",
-                        20);
+        Student student = new Student();
+        student.setName("Lazar");
+        student.setEmail("lazar@mail.com");
+        student.setAge(20);
+        student.setStatus(com.student.student.StudentStatus.ACTIVE);
 
         studentRepository.save(student);
 
