@@ -1,265 +1,112 @@
-````md
-# Student Management API
+# 🎓 Student Management API
 
-A RESTful backend application built with **Spring Boot** for managing student data.  
-The project demonstrates clean layered architecture, secure API development, and modern backend engineering practices.
-
----
-
-## Features
-
-- Create, read, update, and delete students (CRUD operations)
-- RESTful API design with proper HTTP status handling
-- DTO-based request handling and input validation
-- Centralized exception handling
-- Pagination, sorting, and search functionality
-- Layered architecture (Controller / Service / Repository)
-- JWT-based authentication with Spring Security
-- Password encryption using BCrypt
-- Role-based authorization (USER / ADMIN)
-- Protected endpoints with access control
-- Refresh token implementation
-- Token revocation/logout functionality
-- Swagger / OpenAPI documentation
-- Swagger JWT authorization support
-- Dockerized PostgreSQL database
-- Unit testing with JUnit 5 and Mockito
-- H2 in-memory database for testing
-- GitHub Actions CI pipeline
+A production-ready, secure RESTful backend application built with **Spring Boot 3** and **Java 21**.  
+The project demonstrates clean layered architecture, enterprise security, containerization with Docker, automated CI/CD pipelines, and live cloud deployment.
 
 ---
 
-## Tech Stack
+## 🚀 Live Demo & API Documentation
 
-- Java
-- Spring Boot
-- Spring Security
-- Spring Data JPA
-- Hibernate
-- PostgreSQL
-- Maven
-- Docker
-- Swagger / OpenAPI
-- JUnit 5
-- Mockito
-- H2 Database
-- GitHub Actions
+- **Live Application API:** Deployed on Render Cloud
+- **Interactive Swagger Documentation:** Access `/swagger-ui/index.html` on the deployed domain to test endpoints with JWT authorization.
 
 ---
 
-## Project Structure
+## ✨ Features
+
+- **Full CRUD Operations:** Comprehensive management of student profiles, departments, courses, and grades.
+- **RESTful API Design:** Standardized HTTP status codes, custom DTO mappings, and request validation.
+- **Enterprise Security:** Stateless JWT authentication powered by Spring Security, featuring password encryption with BCrypt.
+- **Role-Based Access Control (RBAC):** Distinct permission levels (`USER` vs `ADMIN`).
+- **Refresh Token Lifecycle:** Secure refresh token rotation, database token persistence, expiration handling, and token revocation/logout flow.
+- **Database Migrations:** Automated schema versioning and database evolution using **Flyway**.
+- **Data Querying:** Built-in pagination, sorting, and dynamic search capabilities.
+- **Containerization & Cloud CI/CD:**
+    - Dockerized application and local setup via `docker-compose`.
+    - Automated GitHub Actions workflow for building, testing, and pushing images to **Docker Hub**.
+    - Continuous deployment connected to Render Cloud with managed PostgreSQL persistence.
+- **Automated Testing:** Comprehensive unit and integration test coverage using JUnit 5, Mockito, and H2 in-memory database.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Core & Framework:** Java 21, Spring Boot 3
+- **Security:** Spring Security, JSON Web Tokens (JWT)
+- **Persistence & DB:** Spring Data JPA, Hibernate, PostgreSQL, Flyway Migrations
+- **Containerization & DevOps:** Docker, Docker Hub, Docker Compose
+- **CI/CD & Hosting:** GitHub Actions, Render Cloud Services
+- **Testing:** JUnit 5, Mockito, H2 Database
+- **Documentation & Tools:** Swagger / OpenAPI, Maven
+
+---
+
+## 🏗️ Architecture & Project Structure
+
+The codebase follows a clean, feature-focused layered architecture:
 
 ```text
 src/main/java/com/student
-
-- controller → REST API endpoints
-- service → Business logic layer
-- repository → Database access layer
-- entity → JPA entities
-- dto → Request / response DTOs
-- exception → Custom exceptions and global handlers
-- auth → Authentication and JWT logic
-- token → Refresh token management
-- config → Security and application configuration
+├── auth/           # Authentication endpoints, JWT generation & filtering logic
+├── config/         # Security rules, Swagger OpenAPI & app configuration
+├── student/        # Student domain entity, DTOs, Repository, Service & Controller
+├── department/     # Department management domain logic
+├── course/         # Course domain logic
+├── grade/          # Grading domain logic
+├── refreshtoken/   # Refresh token lifecycle & DB repository
+├── common/         # Base entities & shared audit utilities
+└── exception/      # Centralized global exception handler & error response models
 ```
 
 ---
 
-## Authentication & Authorization
+## 🔒 Security & Role Rules
 
-The application uses JWT-based authentication with Spring Security.
-
-Spring Security is used to enforce role-based access rules for protected endpoints.
-
-### Authentication Flow
-
-1. User registers or logs in
-2. Server validates credentials
-3. Access token (JWT) is generated
-4. Refresh token is generated and stored in the database
-5. JWT token is used to access protected endpoints
-6. Refresh token can generate a new access token when the old one expires
-
-JWT tokens can be tested directly in Swagger UI using the **Authorize** button.
-
----
-
-## Public Endpoints
+All `/api/**` endpoints require a valid JWT Bearer token passed in the HTTP Authorization header:
 
 ```http
-POST /auth/register
-POST /auth/login
-POST /auth/refresh
-POST /auth/logout
+Authorization: Bearer <your_jwt_access_token>
 ```
+
+### Access Matrix
+
+| Role | Allowed Actions |
+| :--- | :--- |
+| **USER** | Read student records, search, filter, and view course/department details (GET requests). |
+| **ADMIN** | Full authority: Create, Update, Delete students, assign courses, manage roles and system resources. |
 
 ---
 
-## Protected Endpoints
+## ⚡ Automated CI/CD Workflow
 
-All `/api/students/**` endpoints require a valid JWT access token.
+Every commit pushed to the `main` branch automatically triggers the GitHub Actions pipeline:
 
-Example header:
-
-```http
-Authorization: Bearer your_jwt_token
-```
-
----
-
-## Access Rules
-
-### USER Role
-
-- Can read student data (GET requests)
-
-### ADMIN Role
-
-- Can create students
-- Can update students
-- Can delete students
+1. **Continuous Integration (CI):** Sets up JDK 21 environment, resolves dependencies, and executes unit and integration tests.
+2. **Dockerization:** Builds an immutable Docker image using multi-stage builds.
+3. **Registry Push:** Authenticates securely with Docker Hub and pushes tagged image releases (`latest` and `<commit-sha>`).
+4. **Continuous Deployment (CD):** Signals the cloud infrastructure to pull the updated image and deploy zero-downtime updates connected to the managed PostgreSQL instance.
 
 ---
 
-## API Endpoints
+## 💻 Local Development Setup
 
-### Students
+### Prerequisites
 
-| Method | Endpoint           | Description        |
-|--------|--------------------|--------------------|
-| GET    | /api/students      | Get all students   |
-| GET    | /api/students/{id} | Get student by ID  |
-| POST   | /api/students      | Create new student |
-| PUT    | /api/students/{id} | Update student     |
-| DELETE | /api/students/{id} | Delete student     |
+- Docker Desktop installed and running
+- Java 21 JDK & Maven (optional if using Docker)
 
----
+### Running with Docker Compose (Recommended)
 
-## Example Request
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/lazarmihajlovic00-collab/student-management-api.git](https://github.com/lazarmihajlovic00-collab/student-management-api.git)
+   cd student-management-api
+   ```
 
-### Create Student
+2. **Start the application & PostgreSQL database:**
+   ```bash
+   docker-compose up -d
+   ```
 
-```json
-{
-  "name": "John Doe",
-  "email": "john.doe@example.com",
-  "age": 21
-}
-```
-
----
-
-## Example Authentication Response
-
-```json
-{
-  "accessToken": "jwt_access_token",
-  "refreshToken": "refresh_token"
-}
-```
-
----
-
-## Refresh Token System
-
-The project includes refresh token support for improved authentication security.
-
-### Refresh Token Features
-
-- Refresh tokens stored in PostgreSQL
-- Token expiration handling
-- Token revocation support
-- Secure logout flow
-- New JWT generation without re-login
-
----
-
-## Testing
-
-The project includes automated unit testing focused on the service layer.
-
-### Testing Stack
-
-- JUnit 5
-- Mockito
-- H2 Database
-
-### Covered Scenarios
-
-- Student creation
-- Student retrieval
-- Student update
-- Student deletion
-- Validation of duplicate emails
-- Student not found scenarios
-- Exception handling paths
-
-Tests are automatically executed through the GitHub Actions CI pipeline on every push and pull request.
-
-## Features in Progress
-
-- Advanced filtering and dynamic search
-- Integration testing
-- API security hardening
-- Clean Architecture refactor
-- Continuous Deployment (CD)
-
----
-
-## How to Run
-
-Clone the repository:
-
-```bash
-git clone https://github.com/lazarmihajlovic00-collab/student-management-api.git
-```
-
-Move into the project directory:
-
-```bash
-cd student-management-api
-```
-
-Install dependencies:
-
-```bash
-mvn clean install
-```
-
-Configure the database inside:
-
-```text
-src/main/resources/application.properties
-```
-
-Run the application:
-
-```bash
-mvn spring-boot:run
-```
-
----
-
-## Swagger UI
-
-Swagger UI is available at:
-
-```text
-http://localhost:8080/swagger-ui/index.html
-```
-
-Use the **Authorize** button to test protected endpoints with JWT tokens.
-
----
-
-## Purpose
-
-This project was built as a backend engineering and portfolio project to demonstrate:
-
-- REST API development
-- Spring Boot backend engineering
-- Authentication and authorization
-- Secure API design
-- Database integration with JPA/Hibernate
-- Production-style backend architecture principles
-````
+3. **Access the local Swagger UI:**
+   Open `http://localhost:8080/swagger-ui/index.html` in your browser.
