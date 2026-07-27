@@ -1,81 +1,37 @@
-2026-07-21 22:58:51 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2026-07-21 22:58:51 [main] INFO  c.s.repository.StudentRepositoryTest - Starting StudentRepositoryTest using Java 25.0.2 with PID 12504 (started by Mladja in C:\Users\Mladja\IdeaProjects\student-management-api)
-2026-07-21 22:58:51 [main] INFO  c.s.repository.StudentRepositoryTest - No active profile set, falling back to 1 default profile: "default"
-2026-07-21 22:58:52 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-07-21 22:58:52 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 113 ms. Found 6 JPA repository interfaces.
-2026-07-21 22:58:53 [main] INFO  o.s.b.t.a.j.TestDatabaseAutoConfiguration$EmbeddedDataSourceBeanFactoryPostProcessor - Replacing 'dataSource' DataSource bean with embedded version
-2026-07-21 22:58:53 [main] INFO  o.s.j.d.e.EmbeddedDatabaseFactory - Starting embedded database: url='jdbc:h2:mem:c8349ed3-ae75-44d1-8bce-cc4e85e95b84;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-2026-07-21 22:58:53 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:h2:mem:c8349ed3-ae75-44d1-8bce-cc4e85e95b84 (H2 2.2)
-2026-07-21 22:58:53 [main] WARN  o.f.c.i.database.base.Database - Flyway upgrade recommended: H2 2.2.224 is newer than this version of Flyway and support has not been tested. The latest supported version of H2 is 2.2.220.
-2026-07-21 22:58:54 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Schema history table "PUBLIC"."flyway_schema_history" does not exist yet
-2026-07-21 22:58:54 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.018s)
-2026-07-21 22:58:54 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."flyway_schema_history" ...
-2026-07-21 22:58:54 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "PUBLIC": << Empty Schema >>
-2026-07-21 22:58:54 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - init schema"
-2026-07-21 22:58:54 [main] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "PUBLIC", now at version v1 (execution time 00:00.029s)
-2026-07-21 22:58:54 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-07-21 22:58:54 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-2026-07-21 22:58:54 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-07-21 22:58:55 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-07-21 22:58:55 [main] WARN  org.hibernate.dialect.Dialect - HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
-2026-07-21 22:58:55 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-07-21 22:58:56 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-07-21 22:58:56 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-07-21 22:58:57 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-07-21 22:58:57 [main] INFO  c.s.repository.StudentRepositoryTest - Started StudentRepositoryTest in 6.581 seconds (process running for 13.007)
-2026-07-21 22:58:58 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-07-21 22:59:20 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
-2026-07-21 22:59:21 [main] INFO  c.s.StudentManagementApiApplication - Starting StudentManagementApiApplication using Java 25.0.2 with PID 21076 (C:\Users\Mladja\IdeaProjects\student-management-api\target\classes started by Mladja in C:\Users\Mladja\IdeaProjects\student-management-api)
-2026-07-21 22:59:21 [main] INFO  c.s.StudentManagementApiApplication - No active profile set, falling back to 1 default profile: "default"
-2026-07-21 22:59:22 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-07-21 22:59:22 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 59 ms. Found 6 JPA repository interfaces.
-2026-07-21 22:59:23 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
-2026-07-21 22:59:23 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
-2026-07-21 22:59:23 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-07-21 22:59:23 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
-2026-07-21 22:59:23 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-07-21 22:59:23 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2434 ms
-2026-07-21 22:59:24 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2026-07-21 22:59:24 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@269308cc
-2026-07-21 22:59:24 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2026-07-21 22:59:24 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5332/lazardb (PostgreSQL 18.4)
-2026-07-21 22:59:24 [main] WARN  o.f.c.i.database.base.Database - Flyway upgrade recommended: PostgreSQL 18.4 is newer than this version of Flyway and support has not been tested. The latest supported version of PostgreSQL is 16.
-2026-07-21 22:59:24 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Schema history table "public"."flyway_schema_history" does not exist yet
-2026-07-21 22:59:24 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.034s)
-2026-07-21 22:59:24 [main] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table "public"."flyway_schema_history" ...
-2026-07-21 22:59:24 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
-2026-07-21 22:59:24 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema "public" to version "1 - init schema"
-2026-07-21 22:59:24 [main] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.047s)
-2026-07-21 22:59:24 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-07-21 22:59:24 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
-2026-07-21 22:59:24 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
-2026-07-21 22:59:25 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-07-21 22:59:25 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2026-07-21 22:59:26 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-07-21 22:59:26 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-07-21 22:59:26 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-07-21 22:59:27 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-07-21 22:59:27 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoint(s) beneath base path '/actuator'
-2026-07-21 22:59:27 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@54c3b0dd, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6c40ae2d, org.springframework.security.web.context.SecurityContextHolderFilter@69c00140, org.springframework.security.web.header.HeaderWriterFilter@1502cd38, org.springframework.web.filter.CorsFilter@d0c3793, org.springframework.security.web.authentication.logout.LogoutFilter@454056b, com.student.config.JwtAuthFilter@4f78adf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5d55eb7a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7ce87f9d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@283c6f00, org.springframework.security.web.session.SessionManagementFilter@419fc1d6, org.springframework.security.web.access.ExceptionTranslationFilter@46b2e0e4, org.springframework.security.web.access.intercept.AuthorizationFilter@330a6b76]
-2026-07-21 22:59:28 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
-2026-07-21 22:59:28 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
-2026-07-21 22:59:28 [main] INFO  c.s.StudentManagementApiApplication - Started StudentManagementApiApplication in 8.253 seconds (process running for 9.183)
-2026-07-21 23:00:21 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-07-21 23:00:21 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
-2026-07-21 23:00:21 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
-2026-07-21 23:01:03 [http-nio-8080-exec-4] INFO  o.a.coyote.http11.Http11Processor - Error parsing HTTP request header
- Note: further occurrences of HTTP request parsing errors will be logged at DEBUG level.
-java.lang.IllegalArgumentException: Invalid character found in method name [0x160x030x010x060xf80x010x000x060xf40x030x030x010x800x810x0cS0x050xaa0x000xd20x040xc30xfeB0x070x1a0xa70x910xba0xbb0x04,!e0xa3l0xdc0x85(0x0210x980x15 ]. HTTP method names must be tokens
-	at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:407)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:264)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:896)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1736)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1474)
-2026-07-21 23:06:51 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-07-21 23:06:51 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
-2026-07-21 23:06:51 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-07-27 00:49:15 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2026-07-27 00:49:15 [main] INFO  c.s.StudentManagementApiApplication - Starting StudentManagementApiApplication using Java 25.0.2 with PID 23676 (C:\Users\Mladja\IdeaProjects\student-management-api\target\classes started by Mladja in C:\Users\Mladja\IdeaProjects\student-management-api)
+2026-07-27 00:49:15 [main] INFO  c.s.StudentManagementApiApplication - No active profile set, falling back to 1 default profile: "default"
+2026-07-27 00:49:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-27 00:49:17 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 67 ms. Found 6 JPA repository interfaces.
+2026-07-27 00:49:18 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-07-27 00:49:18 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-07-27 00:49:18 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-07-27 00:49:18 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2026-07-27 00:49:18 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-07-27 00:49:18 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2788 ms
+2026-07-27 00:49:19 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-07-27 00:49:19 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@177ddd24
+2026-07-27 00:49:19 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-07-27 00:49:19 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5332/lazardb (PostgreSQL 16.14)
+2026-07-27 00:49:19 [main] INFO  o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.056s)
+2026-07-27 00:49:19 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": 1
+2026-07-27 00:49:19 [main] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-07-27 00:49:19 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-27 00:49:20 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2026-07-27 00:49:20 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-07-27 00:49:20 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-27 00:49:21 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-27 00:49:25 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-27 00:49:26 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-27 00:49:27 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-27 00:49:27 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-27 00:49:28 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-07-27 00:49:28 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@344ab465, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5ce1b67b, org.springframework.security.web.context.SecurityContextHolderFilter@3c9e06d7, org.springframework.security.web.header.HeaderWriterFilter@5b12157b, org.springframework.web.filter.CorsFilter@d05d8c3, org.springframework.security.web.authentication.logout.LogoutFilter@665f19d, com.student.config.JwtAuthFilter@699fe19f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@161138c8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@35c66ad, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@250988e5, org.springframework.security.web.session.SessionManagementFilter@16b48082, org.springframework.security.web.access.ExceptionTranslationFilter@6eaf016e, org.springframework.security.web.access.intercept.AuthorizationFilter@cc655a]
+2026-07-27 00:49:29 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-07-27 00:49:29 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2026-07-27 00:49:29 [main] INFO  c.s.StudentManagementApiApplication - Started StudentManagementApiApplication in 14.228 seconds (process running for 15.283)
+2026-07-27 00:50:18 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-27 00:50:18 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-07-27 00:50:18 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2026-07-27 01:03:32 [http-nio-8080-exec-4] WARN  c.s.exception.GlobalExceptionHandler - Authentication failed - Pogrešni kredencijali: Invalid credentials
+2026-07-27 01:39:22 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=4m3s222ms841µs600ns).

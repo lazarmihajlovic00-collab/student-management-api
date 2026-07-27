@@ -28,11 +28,12 @@ public class JwtService {
 
     public String generateToken(User user) {
 
-        //Map<String, Object> claims = new HashMap<>();
-        //claims.put("role", user.getRole().name());
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        claims.put("name", user.getName());
 
         return Jwts.builder()
-                //.setClaims(claims)
+                .setClaims(claims)
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))

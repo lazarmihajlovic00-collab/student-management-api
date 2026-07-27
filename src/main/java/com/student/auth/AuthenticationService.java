@@ -55,7 +55,6 @@ public class AuthenticationService {
         return new AuthenticationResponse(accessToken, refreshToken.getToken());
     }
 
-    @Transactional(readOnly = true)
     public AuthenticationResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new InvalidCredentialsException("Invalid credentials"));
