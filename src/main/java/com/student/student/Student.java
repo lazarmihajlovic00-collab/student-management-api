@@ -14,8 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "students")
-@SQLDelete(sql = "UPDATE students SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE students SET deleted = true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class Student extends BaseEntity {
 
     @Id
