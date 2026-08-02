@@ -22,6 +22,12 @@ public class CourseRequest {
     @Max(value = 300, message = "Maksimalan kapacitet kursa je 300 studenata")
     private Integer maxStudents;
 
+    @NotNull(message = "Smer je obavezan")
+    private Integer departmentId;
+
+    public Integer getDepartmentId() { return departmentId; }
+    public void setDepartmentId(Integer departmentId) { this.departmentId = departmentId; }
+
     public String getCode() {
         return code;
     }

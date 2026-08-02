@@ -52,6 +52,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/api/dashboard/**").hasAnyRole("USER", "ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/api/students/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/students/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/students/**").hasRole("ADMIN")
@@ -66,6 +68,8 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PATCH, "/api/students/*/department/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/students/*/courses/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/courses/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/courses/**").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 )

@@ -5,9 +5,10 @@ The project demonstrates clean layered architecture, enterprise security, contai
 
 ---
 
-## 🚀 Live Demo & API Documentation
+## 🚀 Live Demo & Documentation
 
 - **Live Application API:** Deployed on Render Cloud
+- **Frontend Repository:** [student-management-ui](https://github.com/lazarmihajlovic00-collab/student-management-ui) (React, TypeScript, Vite)
 - **Interactive Swagger Documentation:** Access `/swagger-ui/index.html` on the deployed domain to test endpoints with JWT authorization.
 
 ---

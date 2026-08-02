@@ -2,7 +2,9 @@ package com.student.grade;
 
 import com.student.course.Course;
 import com.student.course.CourseRepository;
+import com.student.exception.CourseNotAssignedException;
 import com.student.exception.CourseNotFoundException;
+import com.student.exception.StudentAlreadyGradedException;
 import com.student.exception.StudentNotFoundException;
 import com.student.student.Student;
 import com.student.student.StudentRepository;
@@ -32,6 +34,17 @@ public class GradeService {
 
         Course course = courseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new CourseNotFoundException("Course not found with id: " + request.getCourseId()));
+
+        if (!student.getCourses().contains(course)) {
+            throw new CourseNotAssignedException("Student mora prvo biti upisan na kurs da bi dobio ocenu!");
+        }
+
+        boolean alreadyGraded = student.getGrades().stream()
+                .anyMatch(g -> g.getCourse().getId().equals(course.getId()));
+
+        if (alreadyGraded) {
+            throw new StudentAlreadyGradedException("Student is already graded for this course!");
+        }
 
         Grade grade = new Grade(request.getValue(), student, course, request.getExamDate());
         Grade savedGrade = gradeRepository.save(grade);

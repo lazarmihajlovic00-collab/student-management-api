@@ -131,8 +131,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CreditLimitExceededException.class)
     public ResponseEntity<ErrorResponse> handleCreditLimitExceeded(CreditLimitExceededException ex) {
-        log.warn("Business rule violation - Preoračen limit ESPB bodova: {}", ex.getMessage());
+        log.warn("Business rule violation - Prekoračen limit ESPB bodova: {}", ex.getMessage());
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(CourseNotAssignedException.class)
+    public ResponseEntity<ErrorResponse> handleCourseNotAssignedException(CourseNotAssignedException ex) {
+        log.error("Business rule violation - Nije dodeljen kurs: {}", ex.getMessage());
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(StudentAlreadyGradedException.class)
+    public ResponseEntity<ErrorResponse> handleStudentAlreadyGradedException(StudentAlreadyGradedException ex) {
+        log.error("Business rule violation - Student vec ocenjen: {}", ex.getMessage());
+        return  buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

@@ -183,27 +183,27 @@ public class StudentService {
                 .orElseThrow(() -> new CourseNotFoundException("Course with id " + courseId + " not found"));
 
         if (student.getStatus() == StudentStatus.GRADUATED) {
-            throw new CourseAssignmentNotAllowedException("Graduated students cannot enroll courses");
+            throw new CourseAssignmentNotAllowedException("Graduated students cannot enroll in new courses.");
         }
 
         if (student.getDepartment() == null) {
-            throw new CourseAssignmentNotAllowedException("Student must be assigned to a department first");
+            throw new CourseAssignmentNotAllowedException("Student must be assigned to a department before enrolling in courses.");
         }
 
         if (course.getDepartment() == null) {
-            throw new CourseAssignmentNotAllowedException("Course is not assigned to any department");
+            throw new CourseAssignmentNotAllowedException("This course is invalid because it is not associated with any department.");
         }
 
         if (!course.getDepartment().getId().equals(student.getDepartment().getId())) {
-            throw new CourseAssignmentNotAllowedException("Course does not belong to student's department");
+            throw new CourseAssignmentNotAllowedException("Student can only enroll in courses that belong to their assigned department.");
         }
 
         if (student.getCourses().contains(course)) {
-            throw new CourseAlreadyAssignedException("Course already assigned");
+            throw new CourseAlreadyAssignedException("Student is already enrolled in this course.");
         }
 
         if (course.getStudents().size() >= course.getMaxStudents()) {
-            throw new CourseAssignmentNotAllowedException("Course is full");
+            throw new CourseAssignmentNotAllowedException("Enrollment failed: Course has reached its maximum student capacity.");
         }
 
         int totalCredits = student.getCourses().stream()
@@ -211,7 +211,7 @@ public class StudentService {
                 .sum();
 
         if (totalCredits + course.getCredits() > MAX_SEMESTER_CREDITS) {
-            throw new CreditLimitExceededException("Maximum credit limit exceeded");
+            throw new CreditLimitExceededException("Enrollment failed: Exceeded maximum allowed credits (" + MAX_SEMESTER_CREDITS + ").");
         }
 
         student.getCourses().add(course);
